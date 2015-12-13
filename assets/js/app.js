@@ -9,10 +9,19 @@ var unparApp = angular.module('arthenticApp', [
 unparApp.config(['$routeProvider',
     function($routeProvider){
         $routeProvider.
-        when('/home', {
-
+        when('/menu', {
+          'templateUrl': 'partials/menu.html',
+          'controller': 'MenuController' //capital awal dan belakang
+        }).
+        when('/login', {
+          'templateUrl': 'partials/login.html',
+          'controller': 'LoginController' //capital awal dan belakang
+        }).
+        when('/register', {
+          'templateUrl': 'partials/register.html',
+          'controller': 'RegisterController' //capital awal dan belakang
         }).
         otherwise({
-            'redirectTo': '/home'
+            'redirectTo': '/login'
         });
     }]);

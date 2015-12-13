@@ -12,29 +12,61 @@
 	<body>
 		<div class="offcanvas-layer">
 		</div>
-		<div class="offcanvas-layer-aspirasi">
-		</div>
+
+	  <!-- Modal -->
+	  <div class="modal fade fixed-left" id="myModal" role="dialog">
+	    <div class="modal-dialog">
+
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Options</h4>
+	        </div>
+	        <div class="modal-body">
+						<ul>
+		          <li><a href="#/profile" onclick="changeTitleHeader('RADICAL Profile')"><span class="fa fa-user"></span>Profile</li>
+							<li><a href="#/login" onclick="changeTitleHeader('Logout')"><span class="fa fa-sign-out"></span>Logout</li>
+						</ul>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+
+	    </div>
+	  </div>
+
+	</div>
+
     <!-- MENU LEFT BAR -->
 		<nav id="left-menu" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
 			<div class="navmenu-brand logo" href="#">
-				<!-- <img src="assets/img/icon1000.png" width="100%"> -->
+				<img src="assets/img/radion.png" width="100%">
 			</div>
 			<ul class="nav navmenu-nav">
-				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Home')">Home</a></li>
-				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Reports')">Laporan</a></li>
-				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Menu')">Menu</a></li>
-				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Calender')">Kalender</a></li>
-				<li class="focus"><a href="#/" onclick="changeTitleHeader('About RADICAL')" >About Us</a></li>
+				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Dashboard')">Dashboard</a></li>
+				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Reports')">Reports</a></li>
+				<li class="focus"><a href="#/menu" onclick="changeTitleHeader('RADICAL Menu')">Menu</a></li>
+				<li class="focus"><a href="#/" onclick="changeTitleHeader('RADICAL Calender')">Calender</a></li>
+				<li class="focus"><a href="http://radiontech.net" onclick="changeTitleHeader('About RADICAL')" >About Us</a></li>
 			</ul>
 		</nav>
 
 		<div class="wrapper-offcanvas">
 
 			<div class="navbar navbar-default navbar-fixed-top">
-        <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#left-menu" data-canvas="body">
-  			<span class="fa fa-bars"></span>
-  			</button>
-  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
+        <div class="col-md-11">
+						<button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#left-menu" data-canvas="body">
+		  			<span class="fa fa-bars"></span>
+		  			</button>
+		  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
+				</div>
+				<div class="col-md-1">
+					<button type="button" class="navbar-toggle" data-toggle="modal" data-target="#myModal" data-canvas="body">
+					<span class="fa fa-users"></span>
+					</button>
+				</div>
       </div>
 
       <!-- PARTIALS -->

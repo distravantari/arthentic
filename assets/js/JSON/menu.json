@@ -1,0 +1,56 @@
+[
+    {
+        "ID":"1" ,
+        "Name":"Esspresso",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"2" ,
+        "Name":"Piccolo",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"3" ,
+        "Name":"Cappucino",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"4" ,
+        "Name":"Moccacino",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"5" ,
+        "Name":"Esspresso",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"6" ,
+        "Name":"Piccolo",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"7" ,
+        "Name":"Cappucino",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"8" ,
+        "Name":"Moccacino",
+        "Composition":"gula",
+        "Price":"20000"
+    },
+    {
+        "ID":"9" ,
+        "Name":"Moccacino",
+        "Composition":"gula",
+        "Price":"20000"
+    }
+]

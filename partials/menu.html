@@ -1,0 +1,35 @@
+<div class='content'>
+  <div class="container-fluid">
+    <div class="row" style="padding-top:50px">
+
+        <div class="col-sm-1">
+          <p>FILTER :</p>
+        </div>
+        <div class="col-sm-11">
+          <input type="text" placeholder="Enter Keyword" ng-model="query" style="margin-left:-50px">
+        </div>
+
+        <div class="col-md-12">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Composition</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="menu in menu | filter:query" class="menu-data">
+                    <tr>
+                        <td>{{menu.ID}}</td>
+                        <td>{{menu.Name}}</td>
+                        <td>{{menu.Composition}}</td>
+                        <td>{{menu.Price}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+  </div>
+</div>

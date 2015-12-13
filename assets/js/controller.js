@@ -3,9 +3,23 @@ var domain = 'http://wilianto.com/Unpar-Apps-Backend/frontend/web/index.php/v3';
 var fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-appControllers.controller('HomeController', function(){
+appControllers.controller('MenuController',['$scope','$http',
+    function($scope,$http){
+        $http.get('assets/js/JSON/menu.json').success(function(data){
+            $scope.menu=data;
+            $scope.loading = false;
+        });
+        changeTitleHeader('Radical Menu');
+    }
+]);
 
-});
+appControllers.controller('LoginController',['$scope','$http',
+    function($scope,$http){}
+]);
+
+appControllers.controller('RegisterController',['$scope','$http',
+    function($scope,$http){}
+]);
 
 var x;
 appControllers.controller('AspirasiController',['$scope','$http','$routeParams', function($scope,$http,$routeParams){
