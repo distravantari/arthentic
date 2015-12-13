@@ -21,7 +21,23 @@ unparApp.config(['$routeProvider',
           'templateUrl': 'partials/register.html',
           'controller': 'RegisterController' //capital awal dan belakang
         }).
+        when('/invoice', {
+          'templateUrl': 'partials/invoice.html',
+          'controller': 'InvoiceController' //capital awal dan belakang
+        }).
+        when('/dashboard', {
+          'templateUrl': 'partials/dashboard.html',
+          'controller': 'DashboardController' //capital awal dan belakang
+        }).
+        when('/profile', {
+          'templateUrl': 'partials/profile.html',
+          'controller': 'ProfileController' //capital awal dan belakang
+        }).
+        when('/order', {
+          'templateUrl': 'partials/order.html',
+          'controller': 'OrderController' //capital awal dan belakang
+        }).
         otherwise({
-            'redirectTo': '/login'
+            'redirectTo': '/dashboard'
         });
     }]);

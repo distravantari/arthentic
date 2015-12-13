@@ -14,11 +14,85 @@ appControllers.controller('MenuController',['$scope','$http',
 ]);
 
 appControllers.controller('LoginController',['$scope','$http',
-    function($scope,$http){}
+    function($scope,$http){
+      changeTitleHeader('LOGIN');
+    }
 ]);
 
 appControllers.controller('RegisterController',['$scope','$http',
-    function($scope,$http){}
+    function($scope,$http){
+      changeTitleHeader('THIS PAGE IS ONLY FOR OWNER');
+    }
+]);
+
+appControllers.controller('InvoiceController',['$scope','$http',
+    function($scope,$http){
+      changeTitleHeader('Invoice');
+    }
+]);
+
+appControllers.controller('DashboardController',['$scope','$http',
+    function($scope,$http){
+      changeTitleHeader('RADICAL DASHBOARD');
+    }
+]);
+
+appControllers.controller('ProfileController',['$scope','$http',
+    function($scope,$http){
+      changeTitleHeader('Profile');
+    }
+]);
+
+appControllers.controller('OrderController',['$scope','$http',
+    function($scope,$http){
+
+      $scope.articles = [{}];
+
+      $scope.PrixTotalTTC = function() {
+       var resultTTC = 0;
+
+       angular.forEach($scope.articles, function(article) {
+         resultTTC += article.montantTTC * article.quantite;
+       });
+       return resultTTC;
+     };
+
+     $scope.PrixTotalHT = function() {
+       var resultHT = 0;
+
+       angular.forEach($scope.articles, function(article) {
+         resultHT += article.montantHT * article.quantite;
+       });
+       return resultHT;
+     };
+
+     $scope.NombreArticle = function() {
+       var resultArticle = 0;
+
+       angular.forEach($scope.articles, function(article) {
+         resultArticle += article.quantite;
+       });
+       return resultArticle;
+     };
+
+     $scope.AjouterArticle = function() {
+       $scope.articles.push({
+         id: '',
+         reference: '',
+         titre: '',
+         prixUnitaire: 0,
+         quantite: 0,
+         montantHT: 0,
+         montantTTC: 0
+       });
+     };
+
+     $scope.SupprimerArticle = function(index) {
+       $scope.articles.splice(index, 1);
+     };
+
+      changeTitleHeader('RADICAL Order');
+    }
 ]);
 
 var x;
