@@ -1,0 +1,47 @@
+[
+    {
+        "name":"Biro Administrasi Rektorat" ,
+        "location":"Gedung Rektorat Lt. 2",
+        "phone":"",
+        "email":"",
+        "image":"assets/img/BAR.jpg"
+    },
+    {
+        "name":"Biro Administrasi Akademik",
+        "location":"Gedung Rektorat Lt. 3",
+        "phone":"",
+        "email":"",
+        "image":"assets/img/BAA.jpg"
+    },
+    {
+        "name":"Biro Kemahasiswaan dan Alumni",
+        "location":"Gedung PKH Lama",
+        "phone":"(022)2032576, 2032655 / 0821-2000-4311 (text only)",
+        "social":"@BKAUnpar",
+        "email":"bka@unpar.ac.id",
+        "image":"assets/img/BKA.jpg"
+
+    },
+    {
+        "name":"Biro Teknologi Informasi",
+        "location":"Gedung Rektorat Lt. 3",
+        "phone":" (022)2032655",
+        "email":"bti@unpar.ac.id",
+        "image":"assets/img/BTI.jpg"
+
+    },
+    {
+        "name":"Pusat Pengembangan Karir",
+        "location":"Gedung Rektorat Lt. 4",
+        "phone":"(022)2032655 ext 100445",
+        "email":"cdc@unpar.ac.id",
+        "image":"assets/img/PPK.jpg"
+    },
+    {
+        "name":"Biro Sarana dan Prasarana",
+        "location":"Gedung PKH Lama",
+        "phone":"",
+        "email":"",
+        "image":"assets/img/BSP.jpg"
+    }
+]

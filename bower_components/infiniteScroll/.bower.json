@@ -1,0 +1,17 @@
+{
+  "name": "infiniteScroll",
+  "main": "js/infiniteScroll.min.js",
+  "dependencies": {
+    "jquery": "latest"
+  },
+  "homepage": "https://github.com/sandi-racy/infiniteScroll",
+  "_release": "ee008c43db",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ee008c43db1aeb7d3757dcd51a71dc1689540576"
+  },
+  "_source": "git://github.com/sandi-racy/infiniteScroll.git",
+  "_target": "*",
+  "_originalSource": "infiniteScroll"
+}

@@ -1,0 +1,34 @@
+{
+  "name": "arthentic",
+  "homepage": "https://github.com/distravantari/arthentic",
+  "authors": [
+    "Distra Vantari <distravantari@gmail.com>"
+  ],
+  "description": "artentic coffee",
+  "main": "",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "angular": "~1.4.8",
+    "angular-mocks": "~1.4.8",
+    "angular-resource": "~1.4.8",
+    "angular-route": "~1.4.8",
+    "angular-sanitize": "~1.4.8",
+    "angulartics": "~0.20.2",
+    "angulartics-google-analytics": "~0.1.3",
+    "font-awesome": "fontawesome#~4.5.0",
+    "infiniteScroll": "*",
+    "ngInfiniteScroll": "~1.2.1"
+  }
+}
