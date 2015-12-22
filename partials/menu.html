@@ -1,7 +1,7 @@
 <div class='content'>
   <div class="container-fluid">
+    <h1>MENU</h1>
     <div class="row" style="padding-top:50px">
-
         <div class="col-sm-1">
           <p>FILTER :</p>
         </div>
@@ -17,17 +17,43 @@
                         <th>Name</th>
                         <th>Composition</th>
                         <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Hapus</th>
                     </tr>
                 </thead>
-                <tbody ng-repeat="menu in menu | filter:query" class="menu-data">
-                    <tr>
-                        <td>{{menu.ID}}</td>
-                        <td>{{menu.Name}}</td>
-                        <td>{{menu.Composition}}</td>
-                        <td>{{menu.Price}}</td>
-                    </tr>
+                <tbody>
+                  <tr ng-repeat="menu in menu | filter:query" class="menu-data">
+                    <th>
+                      <input type="text" ng-model="menu.id" class="form-control bfh-number" value="{{menu.id}}">
+                    </th>
+                    <td>
+                      <input type="text" ng-model="menu.nama"class="form-control" value="{{menu.nama}}">
+                    </td>
+                    <td>
+                      <input type="text" ng-model="menu.komposisi" class="form-control bfh-number" value="{{menu.komposisi}}">
+                    </td>
+                    <td>
+                      <input type="number" ng-model="menu.harga" class="form-control bfh-number" min=0 value="{{menu.harga}}">
+                    </td>
+                    <td>
+                      <input type="number" ng-model="menu.kuantitas" class="form-control bfh-number" min=0 value="{{menu.kuantitas}}">
+                    </td>
+                    <td>
+                      <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                    </td>
+                  </tr>
+                  <!-- <tr class="success">
+                    <td class="success"></td>
+                    <th class="success">TOTAL</th>
+                    <td class="success">{{ jumlahPesanan() }} Jumlah Pesanan(s)</td>
+                    <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ totalHarga() | number:2 }} Rp.</td>
+                    <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ totalHarga() | number:2 }} Rp.</td>
+                    <td class="success"></td>
+                  </tr> -->
                 </tbody>
             </table>
+              <a href ng:click="tambah()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
+              <a href ng:click="save()" class="btn btn-primary">Save</a>
         </div>
 
     </div>

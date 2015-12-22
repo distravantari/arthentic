@@ -1,0 +1,67 @@
+<div class='content'>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+          <h1>Employees Data</h1>
+            <div class="content">
+              <div class="col-md-12">
+                <table class="table table-striped table-hover table-responsive">
+                  <thead>
+                    <tr>
+                      <th>NIK</th>
+                      <th>Nama Karyawan</th>
+                      <th>Alamat</th>
+                      <th>Jabatan</th>
+                      <th>Tangal Lahir</th>
+                      <th>Gaji</th>
+                      <th>Confirm</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="employee in employees">
+                      <td>
+                        <input type="number" ng-model="employee.nik" class="form-control bfh-number" placeholder="Nomor Induk Karyawan" min=0 value="{{employee.nik}}">
+                      </td>
+                      <td>
+                        <input type="text" ng-model="employee.nama" class="form-control" placeholder="Nama Karyawan" value="{{employee.nama}}">
+                      </td>
+                      <td>
+                        <input type="text" ng-model="employee.alamat" class="form-control bfh-number" placeholder="Alamat" value="{{employee.alamat}}">
+                      </td>
+                      <td>
+                        <input type="text" ng-model="employee.jabatan" class="form-control bfh-number" placeholder="Jabatan" value="{{employee.jabatan}}">
+                      </td>
+                      <td>
+                        <input type="text" ng-model="employee.tanggallahir" class="form-control bfh-number" placeholder="DD/MM/YYYY" value="{{employee.tanggallahir}}">
+                      </td>
+                      <td>
+                        <input type="number" ng-model="employee.gaji" class="form-control bfh-number" min=0 value="{{employee.gaji}}">
+                      </td>
+                      <td>
+                        <a href ng:click="update($index)" class="btn btn-primary">Update</a>
+                      </td>
+                      <td>
+                        <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                      </td>
+                    </tr>
+                    <!-- <tr class="success">
+                      <th class="success"></th>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success">{{ Nombreemployee() }} Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
+                      <td class="success"></td>
+                    </tr> -->
+                  </tbody>
+                </table>
+                <a href ng:click="tambah()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
+                <a href ng:click="save()" class="btn btn-primary">Save </a>
+              </div>
+            </div>
+
+        </div>
+    </div>
+  </div>
+</div>

@@ -6,62 +6,86 @@
           <h1>ORDER</h1>
             <div class="content">
               <div class="col-md-12">
+                <form>
                 <table class="table table-striped table-hover table-responsive">
                   <thead>
                     <tr>
                       <th>ID Order</th>
                       <th>ID Menu</th>
-                      <th>Nama Menu</th>
-                      <th>Satuan/Rp</th>
-                      <th>Jumlah</th>
-                      <th>Discount/%</th>
-                      <th>Total Harga Item/Rp</th>
-                      <th>Hapus</th>
+                      <th>Menu Name</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Discount(%)</th>
+                      <th>Total Satuan</th>
+                      <th>Remove</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="article in articles">
-                      <th>
-                        <input type="number" ng-model="article.id" class="form-control bfh-number" placeholder="Id" min=0>
-                      </th>
+                    <tr ng-repeat="article in articles | filter:query" class="menu-data">
                       <td>
-                        <input type="number" ng-model="article.reference" class="form-control bfh-number" placeholder="ID MENU" min=0>
+                        <input type="number" ng-model="article.id" id="idorder" class="idorder form-control bfh-number" placeholder="1" min=0>
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" class="form-control" placeholder="NAMA">
+                        <input type="number" ng-model="article.reference" id="idmenu" class="idmenu form-control bfh-number" placeholder="ID MENU" min=0>
                       </td>
                       <td>
-                        <input type="number" ng-model="article.prixUnitaire" class="form-control bfh-number">
+                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="NAMA">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.quantite" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.montantHT" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="article.quantity" id="quantity" class="quantity form-control bfh-number" placeholder="0" min=0>
                       </td>
                       <td>
-                        <input type="number" ng-model="article.montantTTC" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="article.discount" id="discount" class="discount form-control bfh-number" placeholder="0" min=0>
+                      </td>
+                      <td class="success">
+                        <input type="number" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0">
+                        {{ confirm() | number : 2}}
                       </td>
                       <td>
-                        <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
+                        <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
                       </td>
                     </tr>
                     <tr class="success">
-                      <th class="success">TOTAL</th>
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success"></td>
-                      <td class="success">{{ NombreArticle() }} Jumlah Pesanan(s)</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalHT() | number:2 }} Rp.</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
+                      <td class="success"></td>
+                      <td class="success">{{ NumberOrder() }} Jumlah Pesanan(s)</td>
+                      <th class="success" style="text-align:right;">SubTotal : </th>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }} </td>
+                      <td class="success"></td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <th class="success" style="text-align:right;">Tax and Services : </th>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{0.15*SubTotal() | number:2 }} </td>
+                      <td class="success"></td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <th class="success" style="text-align:right;">GrandTotal : </th>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{1.15*SubTotal() | number:2 }} </td>
                       <td class="success"></td>
                     </tr>
                   </tbody>
                 </table>
-                <a href ng:click="AjouterArticle()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
+                <form>
+                <a href ng:click="tambah()" class="btn btn-primary">Add <i class="fa fa-plus"></i></a>
+                <a href ng:click="save()" class="btn btn-primary">Save</a>
+                <a href ng:click="print()" class="btn btn-primary pull-right">Print Invoice</a>
               </div>
             </div>
-
         </div>
     </div>
   </div>

@@ -37,7 +37,35 @@ unparApp.config(['$routeProvider',
           'templateUrl': 'partials/order.html',
           'controller': 'OrderController' //capital awal dan belakang
         }).
+        when('/dailyreports', {
+          'templateUrl': 'partials/dailyreports.html',
+          'controller': 'DailyReportsController' //capital awal dan belakang
+        }).
+        when('/weeklyreports', {
+          'templateUrl': 'partials/weeklyreports.html',
+          'controller': 'WeeklyReportsController' //capital awal dan belakang
+        }).
+        when('/monthlyreports', {
+          'templateUrl': 'partials/monthlyreports.html',
+          'controller': 'MonthlyReportsController' //capital awal dan belakang
+        }).
+        when('/employeesdata', {
+          'templateUrl': 'partials/datapegawai.html',
+          'controller': 'EmployeesDataController' //capital awal dan belakang
+        }).
+        when('/supplierdata', {
+          'templateUrl': 'partials/datasupplier.html',
+          'controller': 'SupplierDataController' //capital awal dan belakang
+        }).
+        when('/datamember', {
+          'templateUrl': 'partials/datamember.html',
+          'controller': 'MemberDataController' //capital awal dan belakang
+        }).
+        when('/stockdetail', {
+          'templateUrl': 'partials/stockdetail.html',
+          'controller': 'StockDetailController' //capital awal dan belakang
+        }).
         otherwise({
-            'redirectTo': '/dashboard'
+            'redirectTo': '/login'
         });
     }]);

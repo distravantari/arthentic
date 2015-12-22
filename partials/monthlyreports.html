@@ -1,0 +1,57 @@
+<div class='content'>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+          <h1>Monthly Reports</h1>
+            <div class="content">
+              <div class="col-md-12">
+                <table class="table table-striped table-hover table-responsive">
+                  <thead>
+                    <tr>
+                      <th>ID Menu</th>
+                      <th>Nama Menu</th>
+                      <th>Kuantitas Terjual</th>
+                      <th>Harga</th>
+                      <th>Jumlah Pendapatan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="article in articles">
+                      <td>
+                        <input type="number" ng-model="article.reference" class="form-control bfh-number" placeholder="ID MENU" min=0>
+                      </td>
+                      <td>
+                        <input type="text" ng-model="article.titre" class="form-control" placeholder="NAMA">
+                      </td>
+                      <td>
+                        <input type="number" ng-model="article.quantite" class="form-control bfh-number" min=0>
+                      </td>
+                      <td>
+                        <input type="number" ng-model="article.montantHT" class="form-control bfh-number" min=0>
+                      </td>
+                      <td>
+                        <input type="number" ng-model="article.montantTTC" class="form-control bfh-number" min=0>
+                      </td>
+                      <!-- <td>
+                        <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
+                      </td> -->
+                    </tr>
+                    <tr class="success">
+                      <th class="success"></th>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success">{{ NombreArticle() }} Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
+                      <td class="success"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <a href ng:click="AjouterArticle()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a> -->
+              </div>
+            </div>
+
+        </div>
+    </div>
+  </div>
+</div>
