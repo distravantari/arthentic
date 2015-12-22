@@ -2,15 +2,10 @@
   <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-          <h1>Daily Reports</h1>
+
+          <h1>Monthly Reports</h1>
             <div class="content">
               <div class="col-md-12">
-                <div class="col-md-3">
-                  <input type="text" ng-model="input.tanggal" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD">
-                </div>
-                <div class="col-md-3">
-                  <a href ng:click="proceed()" class="btn btn-primary">Ok</a>
-                </div>
                 <table class="table table-striped table-hover table-responsive">
                   <thead>
                     <tr>
@@ -22,21 +17,21 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="daily in dailys">
+                    <tr ng-repeat="article in articles">
                       <td>
-                        <input type="number" ng-model="daily.id" class="form-control bfh-number" placeholder="Id Menu" min=0 value="{{daily.id}}">
+                        <input type="number" ng-model="article.reference" class="form-control bfh-number" placeholder="ID MENU" min=0>
                       </td>
                       <td>
-                        <input type="text" ng-model="daily.name" class="form-control" placeholder="Name" value="{{daily.name}}">
+                        <input type="text" ng-model="article.titre" class="form-control" placeholder="NAMA">
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.quantity" class="form-control bfh-number" min=0 value="{{daily.quantity}}">
+                        <input type="number" ng-model="article.quantite" class="form-control bfh-number" min=0>
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.price" class="form-control bfh-number" min=0 value="{{daily.price}}">
+                        <input type="number" ng-model="article.montantHT" class="form-control bfh-number" min=0>
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.total" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="article.montantTTC" class="form-control bfh-number" min=0>
                       </td>
                       <!-- <td>
                         <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
@@ -46,8 +41,8 @@
                       <th class="success"></th>
                       <td class="success"></td>
                       <td class="success"></td>
-                      <td class="success">{{ total() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">{{ SubTotal() | number:2 }} Rp.</td>
+                      <td class="success">{{ NombreArticle() }} Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
                       <td class="success"></td>
                     </tr>
                   </tbody>

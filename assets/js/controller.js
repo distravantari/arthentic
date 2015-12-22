@@ -297,14 +297,8 @@ appControllers.controller('DailyReportsController',['$scope','$http',
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
-            obj = JSON.parse(response);
-            if (obj.message === ("Registrasi berhasil atas nama "+user)) {
-              window.location.assign(domain+":8080/arthentic/");
-            }
-            else {
-              // alert(obj.message);
-              // window.location.assign(domain+":8080/arthentic/#/dashboard")
-            }
+            // alert(obj.message);
+            // window.location.assign(domain+":8080/arthentic/#/dashboard")
           },
           error: function(xhr, status, error){
             alert(error);
@@ -331,13 +325,12 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
     }
 ]);
 
+var ord;
 appControllers.controller('OrderController',['$scope','$http',
     function($scope,$http){
 
       $scope.articles = [{}];
       var i = 0;
-      var counter=1;
-
       //getDate
       var today = new Date();
       var dd = today.getDate();
@@ -345,6 +338,15 @@ appControllers.controller('OrderController',['$scope','$http',
       var yyyy = today.getFullYear();
       today = yyyy+'/'+mm+'/'+dd;
       $(".todaysdate").text(today);
+
+      $scope.getIdOrd = function () {
+        $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
+    				ord=data[0].message.nomerOrder;
+           ord++;
+    				$scope.loading = false;
+    		});
+        $scope.articles[i].id = ord;
+      }
 
       $scope.getMenuById = function () {
         // alert(i);
@@ -421,7 +423,7 @@ appControllers.controller('OrderController',['$scope','$http',
     $scope.tambah = function() {
       i++;
       $scope.articles.push({
-        id: 1,
+        id: '',
         reference: '',
         titre: '',
         price: 0,
@@ -429,6 +431,7 @@ appControllers.controller('OrderController',['$scope','$http',
         discount: 0,
         total:0
       });
+      ord++;
       $('#btnplus').addClass('hidden');
     };
 
@@ -464,7 +467,6 @@ appControllers.controller('OrderController',['$scope','$http',
      };
 
      $scope.save = function () {
-       $('#btnplus').removeClass('hidden');
        var idorder = $scope.articles[i].id;
        var idmenu = $scope.articles[i].reference;
        var menuname = $scope.articles[i].titre;
@@ -491,7 +493,12 @@ appControllers.controller('OrderController',['$scope','$http',
          },
          success: function(response){
            obj = JSON.parse(response)
-           alert(obj.message);
+           if (obj.message === "success") {
+             $('#btnplus').removeClass('hidden');
+           }
+           else {
+             alert("id order tidak boleh kosong");
+           }
          },
          error: function(xhr, status, error){
            alert(error);
@@ -507,6 +514,12 @@ appControllers.controller('OrderController',['$scope','$http',
      $scope.print = function () {
        document.location.assign(domain+':8080/arthentic/#/invoice');
      }
+
+    //  $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
+ 	// 			ord=data[0].message.nomerOrder;
+    //     ord++;
+ 	// 			$scope.loading = false;
+ 	// 	});
 
       changeTitleHeader('RADICAL Order');
     }
