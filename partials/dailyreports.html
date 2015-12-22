@@ -2,7 +2,6 @@
   <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-
           <h1>Daily Reports</h1>
             <div class="content">
               <div class="col-md-12">
@@ -48,7 +47,7 @@
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success">{{ total() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ SubTotal() | number:2 }} Rp.</td>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">{{ SubTotal() | number:2 }} Rp.</td>
                       <td class="success"></td>
                     </tr>
                   </tbody>
