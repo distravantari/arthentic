@@ -1,59 +1,63 @@
 <div class='content'>
   <div class="container-fluid">
+    <h1>Stock Detail</h1>
     <div class="row">
-        <div class="col-md-12">
-
-          <h1>Stock Detail</h1>
-            <div class="content">
-              <div class="col-md-12">
-                <table class="table table-striped table-hover table-responsive">
-                  <thead>
-                    <tr>
-                      <th>Id Stock</th>
-                      <th>Nama Stock</th>
-                      <th>Jumlah</th>
-                      <th>Harga Total</th>
-                      <th>Confirm</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="stock in stocks">
-                      <td>
-                        <input type="number" ng-model="stock.id" class="form-control bfh-number" placeholder="Id Stock" min=0 value="{{stock.id}}">
-                      </td>
-                      <td>
-                        <input type="text" ng-model="stock.nama" class="form-control" placeholder="Nama Stock" value="{{stock.nama}}">
-                      </td>
-                      <td>
-                        <input type="number" ng-model="stock.jumlah" class="form-control bfh-number" value="{{stock.jumlah}}">
-                      </td>
-                      <td>
-                        <input type="number" ng-model="stock.hargaTotal" class="form-control bfh-number" min=0 value="{{stock.hargaTotal}}">
-                      </td>
-                      <td>
-                        <a href ng:click="update($index)" class="btn btn-primary">Update</a>
-                      </td>
-                      <td>
-                        <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
-                      </td>
-                    </tr>
-                    <!-- <tr class="success">
-                      <th class="success"></th>
-                      <td class="success"></td>
-                      <td class="success"></td>
-                      <td class="success">{{ Nombrestock() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
-                      <td class="success"></td>
-                    </tr> -->
-                  </tbody>
-                </table>
-                <a href ng:click="tambah()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
-                <a href ng:click="save()" class="btn btn-primary">Save </a>
-              </div>
+      <div class="col-sm-1">
+        <p>FILTER :</p>
+      </div>
+      <div class="col-sm-11">
+        <input type="text" placeholder="Enter Keyword" ng-model="query" style="margin-left:-50px">
+      </div>
+      <div class="col-md-12">
+          <div class="content">
+            <div class="col-md-12">
+              <table class="table table-striped table-hover table-responsive">
+                <thead>
+                  <tr>
+                    <th>Id Stock</th>
+                    <th>Nama Stock</th>
+                    <th>Jumlah</th>
+                    <th>Harga Total</th>
+                    <th>Confirm</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="stock in stocks  | filter:query" class="stocks-data">
+                    <td>
+                      <input type="number" ng-model="stock.id" class="form-control bfh-number" placeholder="Id Stock" min=0 value="{{stock.id}}">
+                    </td>
+                    <td>
+                      <input type="text" ng-model="stock.nama" class="form-control" placeholder="Nama Stock" value="{{stock.nama}}">
+                    </td>
+                    <td>
+                      <input type="number" ng-model="stock.jumlah" class="form-control bfh-number" value="{{stock.jumlah}}">
+                    </td>
+                    <td>
+                      <input type="number" ng-model="stock.hargaTotal" class="form-control bfh-number" min=0 value="{{stock.hargaTotal}}">
+                    </td>
+                    <td>
+                      <a href ng:click="update($index)" class="btn btn-primary">Update</a>
+                    </td>
+                    <td>
+                      <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                    </td>
+                  </tr>
+                  <!-- <tr class="success">
+                    <th class="success"></th>
+                    <td class="success"></td>
+                    <td class="success"></td>
+                    <td class="success">{{ Nombrestock() }} Total Pendapatan Hari Ini</td>
+                    <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
+                    <td class="success"></td>
+                  </tr> -->
+                </tbody>
+              </table>
+              <a href ng:click="tambah()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
+              <a href ng:click="save()" class="btn btn-primary">Save </a>
             </div>
-
-        </div>
+          </div>
+      </div>
     </div>
   </div>
 </div>

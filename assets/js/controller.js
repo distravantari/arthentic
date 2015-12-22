@@ -70,6 +70,7 @@ appControllers.controller('MenuController',['$scope','$http',
          success: function(response){
            obj = JSON.parse(response);
            alert(obj.message);
+           document.location.reload();
          },
          error: function(xhr, status, error){
            alert(error);
