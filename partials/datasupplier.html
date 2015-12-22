@@ -37,7 +37,7 @@
                         <input type="text" ng-model="supplier.nomertelepon" class="form-control bfh-number" min=0 value="{{supplier.nomertelepon}}">
                       </td>
                       <td>
-                        <a href ng:click="update($index)" class="btn btn-primary">Update</a>
+                        <a href ng:click="update($index)" ng-class="updatebtn" class="btn btn-primary">Update</a>
                       </td>
                       <td>
                         <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
@@ -53,7 +53,7 @@
                     </tr> -->
                   </tbody>
                 </table>
-                <a href ng:click="tambah()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
+                <a href ng:click="tambah();updatebtn='hidden'" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a>
                 <a href ng:click="save()" class="btn btn-primary">Save </a>
               </div>
             </div>

@@ -433,7 +433,34 @@ appControllers.controller('OrderController',['$scope','$http',
     };
 
      $scope.delete = function(index) {
+       var id = $scope.articles[index].id;
+       var idmenu = $scope.articles[index].reference;
+
+       $.ajax({
+         url: domain + ':3000/api/deleteOrder',
+         dataType: 'text',
+         method: 'POST',
+         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+         data: {
+           nomerorder:id,
+           id:idmenu,
+           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+         },
+         success: function(response){
+           obj = JSON.parse(response)
+           alert(obj.message);
+         },
+         error: function(xhr, status, error){
+           alert(error);
+           // document.location.reload();
+         },
+         complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+          //do smth if you need
+         //  document.location.reload();
+        }
+      });
        $scope.articles.splice(index, 1);
+       i--;
      };
 
      $scope.save = function () {
