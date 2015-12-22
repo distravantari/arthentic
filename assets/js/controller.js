@@ -325,10 +325,10 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
     }
 ]);
 
-var ord;
+var ord =1;
 appControllers.controller('OrderController',['$scope','$http',
     function($scope,$http){
-
+    //
       $scope.articles = [{}];
       var i = 0;
       //getDate
@@ -338,16 +338,16 @@ appControllers.controller('OrderController',['$scope','$http',
       var yyyy = today.getFullYear();
       today = yyyy+'/'+mm+'/'+dd;
       $(".todaysdate").text(today);
-
+    //
       $scope.getIdOrd = function () {
-        $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
-    				ord=data[0].message.nomerOrder;
-           ord++;
-    				$scope.loading = false;
-    		});
+        // $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
+    		// 		ord=data[0].message.nomerOrder;
+        //    ord++;
+    		// 		$scope.loading = false;
+    		// });
         $scope.articles[i].id = ord;
       }
-
+    //
       $scope.getMenuById = function () {
         // alert(i);
         var idmenu = $scope.articles[i].reference;
@@ -378,7 +378,7 @@ appControllers.controller('OrderController',['$scope','$http',
          }
        });
       }
-
+    //
       $scope.confirm = function(){
         var idorder = $scope.articles[i].id;
         var idmenu = $scope.articles[i].reference;
@@ -390,7 +390,7 @@ appControllers.controller('OrderController',['$scope','$http',
         var total = (Number(price)*Number(quantity))-(Number(discount/100)*(Number(price)*Number(quantity)));
         $scope.articles[i].total=total;
       }
-
+    //
       $scope.PrixTotalTTC = function() {
        var resultTTC = 0;
 
@@ -400,7 +400,7 @@ appControllers.controller('OrderController',['$scope','$http',
 
        return resultTTC;
      };
-
+    //
      $scope.SubTotal = function() {
        var resultHT =0;
 
@@ -410,7 +410,7 @@ appControllers.controller('OrderController',['$scope','$http',
 
        return resultHT;
      };
-
+    //
      $scope.NumberOrder = function() {
        var resultArticle = 0;
 
@@ -419,7 +419,7 @@ appControllers.controller('OrderController',['$scope','$http',
        });
        return resultArticle;
      };
-
+    //
     $scope.tambah = function() {
       i++;
       $scope.articles.push({
@@ -432,9 +432,9 @@ appControllers.controller('OrderController',['$scope','$http',
         total:0
       });
       ord++;
-      $('#btnplus').addClass('hidden');
+      // $('#btnplus').addClass('hidden');
     };
-
+    //
      $scope.delete = function(index) {
        var id = $scope.articles[index].id;
        var idmenu = $scope.articles[index].reference;
@@ -465,54 +465,57 @@ appControllers.controller('OrderController',['$scope','$http',
        $scope.articles.splice(index, 1);
        i--;
      };
-
+    //
      $scope.save = function () {
-       var idorder = $scope.articles[i].id;
-       var idmenu = $scope.articles[i].reference;
-       var menuname = $scope.articles[i].titre;
-       var price = $scope.articles[i].price;
-       var quantity = $scope.articles[i].quantity;
-       var discount = $scope.articles[i].discount;
-       var total = $scope.articles[i].total;
+       for (var i = 0; i < $scope.articles.length; i++) {
 
-       $.ajax({
-         url: domain + ':3000/api/insertOrder',
-         dataType: 'text',
-         method: 'POST',
-         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-         data: {
-           id:idmenu,
-           date:today,
-           pesanan:menuname,
-           quantity:quantity,
-           diskon:discount,
-           hargaSatuan:price,
-           hargaAkhir:total,
-           nomororder:idorder,
-           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-         },
-         success: function(response){
-           obj = JSON.parse(response)
-           if (obj.message === "success") {
-             $('#btnplus').removeClass('hidden');
-           }
-           else {
-             alert("id order tidak boleh kosong");
-           }
-         },
-         error: function(xhr, status, error){
-           alert(error);
-           // document.location.reload();
-         },
-         complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-          //do smth if you need
-         //  document.location.reload();
-        }
-      });
+         var idorder = $scope.articles[i].id;
+         var idmenu = $scope.articles[i].reference;
+         var menuname = $scope.articles[i].titre;
+         var price = $scope.articles[i].price;
+         var quantity = $scope.articles[i].quantity;
+         var discount = $scope.articles[i].discount;
+         var total = $scope.articles[i].total;
+
+         $.ajax({
+           url: domain + ':3000/api/insertOrder',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             id:idmenu,
+             date:today,
+             pesanan:menuname,
+             quantity:quantity,
+             diskon:discount,
+             hargaSatuan:price,
+             hargaAkhir:total,
+             nomororder:idorder,
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response)
+             if (obj.message === "success") {
+              // alert(obj.message);
+             }
+             else {
+               alert("id order tidak boleh kosong");
+             }
+           },
+           error: function(xhr, status, error){
+             alert(error);
+             // document.location.reload();
+           },
+           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+            //do smth if you need
+           //  document.location.reload();
+          }
+        });
+       }
      }
-
+    //
      $scope.print = function () {
-       document.location.assign(domain+':8080/arthentic/#/invoice');
+       document.location.assign(domain+':/arthentic/#/invoice');
      }
 
     //  $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
