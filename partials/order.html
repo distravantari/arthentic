@@ -2,6 +2,7 @@
   <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+
           <h1>ORDER</h1>
             <div class="content">
               <div class="col-md-12">
@@ -23,16 +24,16 @@
                   <tbody>
                     <tr ng-repeat="article in articles | filter:query" class="menu-data">
                       <td>
-                        <input type="number" ng-model="article.id" id="idorder" class="idorder form-control bfh-number" placeholder="x" min=0 value="{{ getIdOrd() }}" readonly>
+                        <input type="number" ng-model="article.id" id="idorder" class="idorder form-control bfh-number" placeholder="1" min=1 value="1">
                       </td>
                       <td>
                         <input type="text" ng-model="article.reference" id="idmenu" class="idmenu form-control bfh-number" placeholder="MNx">
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" value="{{ getMenuById() }}" readonly>
+                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" value="{{ getMenuById() }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" value="{{ getMenuById() }}" readonly>
+                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" value="{{ getMenuById() }}">
                       </td>
                       <td>
                         <input type="number" ng-model="article.quantity" id="quantity" class="quantity form-control bfh-number" placeholder="0" min=0>
@@ -41,7 +42,7 @@
                         <input type="number" ng-model="article.discount" id="discount" class="discount form-control bfh-number" placeholder="0" min=0>
                       </td>
                       <td class="success">
-                        <input type="number" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0" value="{{ confirm() | number : 2}}" readonly>
+                        <input type="number" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0" value="{{ confirm() | number : 2}}">
                       </td>
                       <td>
                         <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
