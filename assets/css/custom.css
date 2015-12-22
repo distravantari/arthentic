@@ -928,6 +928,10 @@ b{
     width: 50px;
 }
 
+.hidden{
+  display: none;
+}
+
 /*
 .parallax {
   	perspective: 1px;

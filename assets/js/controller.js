@@ -46,6 +46,41 @@ appControllers.controller('MenuController',['$scope','$http',
        idx++;
      };
 
+     $scope.update = function (index) {
+       var id = $scope.menu[index].id;
+       var name = $scope.menu[index].nama;
+       var composition = $scope.menu[index].komposisi;
+       var price = $scope.menu[index].harga;
+       var quantity = $scope.menu[index].kuantitas;
+
+       $.ajax({
+         url: domain + ':3000/api/updateMenu',
+         dataType: 'text',
+         method: 'POST',
+         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+         data: {
+           id:id,
+           idBaru:id,
+           namaBaru:name,
+           komposisiBaru:composition,
+           hargaBaru:price,
+           kuantitasBaru:quantity,
+           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+         },
+         success: function(response){
+           obj = JSON.parse(response);
+           alert(obj.message);
+         },
+         error: function(xhr, status, error){
+           alert(error);
+         },
+         complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+          //do smth if you need
+         //  document.location.reload();
+        }
+      });
+     }
+
      $scope.save = function () {
        var id = $scope.menu[idx].id;
        var name = $scope.menu[idx].nama;
@@ -302,18 +337,44 @@ appControllers.controller('OrderController',['$scope','$http',
       var i = 0;
       var counter=1;
 
-      // $scope.save = function () {
-      //   for (var i = 0; i < articles.length; i++) {
-      //     var idorder = $scope.articles[i].id;
-      //     var idmenu = $scope.articles[i].reference;
-      //     var menuname = $scope.articles[i].titre;
-      //     var price = $scope.articles[i].price;
-      //     var quantity = $scope.articles[i].quantity;
-      //     var discount = $scope.articles[i].discount;
-      //
-      //     var total = (Number(price)*Number(quantity))-(Number(discount/100)*(Number(price)*Number(quantity)));
-      //   }
-      // }
+      //getDate
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      today = yyyy+'/'+mm+'/'+dd;
+      $(".todaysdate").text(today);
+
+      $scope.getMenuById = function () {
+        // alert(i);
+        var idmenu = $scope.articles[i].reference;
+
+        $.ajax({
+          url: domain + ':3000/api/showMenuById',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            id:idmenu,
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            // alert(response.message[0].nama);
+            var harga = Number(response.message[0].harga)
+            $scope.articles[i].price = harga;
+            $scope.articles[i].titre = response.message[0].nama;
+          },
+          error: function(xhr, status, error){
+            // alert(error);
+            throw error;
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+       });
+      }
 
       $scope.confirm = function(){
         var idorder = $scope.articles[i].id;
@@ -357,10 +418,9 @@ appControllers.controller('OrderController',['$scope','$http',
      };
 
     $scope.tambah = function() {
-      counter++;
       i++;
       $scope.articles.push({
-        id: counter,
+        id: 1,
         reference: '',
         titre: '',
         price: 0,
@@ -368,11 +428,57 @@ appControllers.controller('OrderController',['$scope','$http',
         discount: 0,
         total:0
       });
+      $('#btnplus').addClass('hidden');
     };
 
      $scope.delete = function(index) {
        $scope.articles.splice(index, 1);
      };
+
+     $scope.save = function () {
+       $('#btnplus').removeClass('hidden');
+       var idorder = $scope.articles[i].id;
+       var idmenu = $scope.articles[i].reference;
+       var menuname = $scope.articles[i].titre;
+       var price = $scope.articles[i].price;
+       var quantity = $scope.articles[i].quantity;
+       var discount = $scope.articles[i].discount;
+       var total = $scope.articles[i].total;
+
+       $.ajax({
+         url: domain + ':3000/api/insertOrder',
+         dataType: 'text',
+         method: 'POST',
+         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+         data: {
+           id:idmenu,
+           date:today,
+           pesanan:menuname,
+           quantity:quantity,
+           diskon:discount,
+           hargaSatuan:price,
+           hargaAkhir:total,
+           nomororder:idorder,
+           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+         },
+         success: function(response){
+           obj = JSON.parse(response)
+           alert(obj.message);
+         },
+         error: function(xhr, status, error){
+           alert(error);
+           // document.location.reload();
+         },
+         complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+          //do smth if you need
+         //  document.location.reload();
+        }
+      });
+     }
+
+     $scope.print = function () {
+       document.location.assign(domain+':8080/arthentic/#/invoice');
+     }
 
       changeTitleHeader('RADICAL Order');
     }
@@ -824,7 +930,7 @@ appControllers.controller('MemberDataController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "input customer berhasil") {
-              alert(obj.message);
+              // alert(obj.message);
               document.location.reload();
             }
             else {

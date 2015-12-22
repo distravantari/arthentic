@@ -18,6 +18,7 @@
                         <th>Composition</th>
                         <th>Price</th>
                         <th>Quantity</th>
+                        <th>Update</th>
                         <th>Hapus</th>
                     </tr>
                 </thead>
@@ -37,6 +38,9 @@
                     </td>
                     <td>
                       <input type="number" ng-model="menu.kuantitas" class="form-control bfh-number" min=0 value="{{menu.kuantitas}}">
+                    </td>
+                    <td>
+                      <a href ng:click="update($index)" class="btn btn-primary">Update</a>
                     </td>
                     <td>
                       <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
