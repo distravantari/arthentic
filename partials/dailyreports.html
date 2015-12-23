@@ -24,19 +24,19 @@
                   <tbody>
                     <tr ng-repeat="daily in dailys">
                       <td>
-                        <input type="number" ng-model="daily.id" class="form-control bfh-number" placeholder="Id Menu" min=0 value="{{daily.id}}">
+                        <input type="text" ng-model="daily.Id" class="form-control bfh-number" value="{{ daily.Id }}">
                       </td>
                       <td>
-                        <input type="text" ng-model="daily.name" class="form-control" placeholder="Name" value="{{daily.name}}">
+                        <input type="text" ng-model="daily.Pesanan" class="form-control" value="{{ daily.Pesanan }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.quantity" class="form-control bfh-number" min=0 value="{{daily.quantity}}">
+                        <input type="number" ng-model="daily.Quantity" class="form-control bfh-number" min=0 value="{{ daily.Quantity }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.price" class="form-control bfh-number" min=0 value="{{daily.price}}">
+                        <input type="number" ng-model="daily.HargaAkhir" class="form-control bfh-number" min=0 value="{{ daily.HargaAkhir | number:2 }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="daily.total" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="daily.total" class="form-control bfh-number" min=0 value="{{ total($index) }}">
                       </td>
                       <!-- <td>
                         <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
@@ -46,8 +46,8 @@
                       <th class="success"></th>
                       <td class="success"></td>
                       <td class="success"></td>
-                      <td class="success">{{ total() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">{{ SubTotal() | number:2 }} Rp.</td>
+                      <td class="success">Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }}</td>
                       <td class="success"></td>
                     </tr>
                   </tbody>

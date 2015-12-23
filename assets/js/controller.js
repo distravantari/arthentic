@@ -286,6 +286,23 @@ appControllers.controller('DailyReportsController',['$scope','$http',
       changeTitleHeader('Daily Reports');
       $scope.dailys = [{}];
 
+      $scope.total = function (idx) {
+        var price = $scope.dailys[idx].HargaAkhir;
+        var quantity = $scope.dailys[idx].Quantity;
+
+        $scope.dailys[idx].total = price*quantity;
+      }
+
+      $scope.SubTotal = function () {
+        var resultHT =0;
+
+         angular.forEach($scope.dailys, function (daily) {
+           resultHT += daily.total;
+         });
+
+        return resultHT;
+      }
+
       $scope.proceed = function () {
         var tanggal = $scope.input.tanggal;
 
@@ -295,11 +312,17 @@ appControllers.controller('DailyReportsController',['$scope','$http',
           method: 'POST',
           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
           data: {
-            tanggal: tanggal,
+            date: tanggal,
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
-            // alert(obj.message);
+            // alert(response.message.length);
+            for (var i = 0; i < response.message.length; i++) {
+              $scope.dailys.push(response.message[i]);
+            }
+            $scope.dailys.splice(0, 1);
+            $scope.loading = false;
+            // alert(response.message[0].Id);
             // window.location.assign(domain+":8080/arthentic/#/dashboard")
           },
           error: function(xhr, status, error){
