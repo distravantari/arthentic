@@ -6,6 +6,18 @@
           <h1><span style="color:black">Weekly</span> <span style="color:orange">Reports</span></h1>
             <div class="content">
               <div class="col-md-12">
+                <div class="col-md-3">
+                  start date :
+                  <input type="text" ng-model="input.startdate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                </div>
+                  <div class="col-md-3">
+                    end date :
+                    <input type="text" ng-model="input.enddate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                  </div>
+                <div class="col-md-3">
+                  <br>
+                  <a href ng:click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
+                </div>
                 <table class="table table-striped table-hover table-responsive">
                   <thead>
                     <tr>
@@ -17,25 +29,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="article in articles">
+                    <tr ng-repeat="week in weekly">
                       <td>
-                        <input type="number" ng-model="article.reference" class="form-control bfh-number" placeholder="ID MENU" min=0>
+                        <input type="text" ng-model="week.Id" class="form-control bfh-number" value="{{ week.Id }}">
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" class="form-control" placeholder="NAMA">
+                        <input type="text" ng-model="week.Pesanan" class="form-control" value="{{ week.Pesanan }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.quantite" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="week.Quantity" class="form-control bfh-number" min=0 value="{{ week.Quantity }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.montantHT" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhir | number:2 }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.montantTTC" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="week.total" class="form-control bfh-number" min=0 value="{{ total($index) }}">
                       </td>
-                      <!-- <td>
-                        <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
-                      </td> -->
                     </tr>
                     <tr class="success">
                       <th class="success"></th>

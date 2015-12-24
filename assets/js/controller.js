@@ -360,6 +360,7 @@ appControllers.controller('DailyReportsController',['$scope','$http',
       }
 
       $scope.proceed = function () {
+        $('.bars').removeClass('hidden');
         var tanggal = $scope.input.tanggal;
 
         $.ajax({
@@ -397,6 +398,39 @@ appControllers.controller('DailyReportsController',['$scope','$http',
 appControllers.controller('WeeklyReportsController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
+      var startdate = $scope.input.startdate;
+      var enddate = $scope.input.enddate;
+
+      $.ajax({
+        url: domain + ':3000/api/hitungMingguan',
+        dataType: 'JSON',
+        method: 'POST',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: {
+          startdate: startdate,
+          enddate: enddate,
+          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+        },
+        success: function(response){
+          // alert(response.message.length);
+          for (var i = 0; i < response.message.length; i++) {
+            $scope.dailys.push(response.message[i]);
+          }
+          $scope.weekly.splice(0, 1);
+          $scope.loading = false;
+          // alert(response.message[0].Id);
+          // window.location.assign(domain+":8080/arthentic/#/dashboard")
+        },
+        error: function(xhr, status, error){
+          alert(error);
+          // document.location.reload();
+        },
+        complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+         //do smth if you need
+        //  document.location.reload();
+       }
+     });
+
       changeTitleHeader('Weekly Reports');
     }
 ]);
