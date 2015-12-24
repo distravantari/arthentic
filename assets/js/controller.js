@@ -237,6 +237,7 @@ appControllers.controller('LoginController',['$scope','$http',
        });
       }
 
+      //  $(this).addClass('text-success');
       changeTitleHeader('RADICAL LOGIN');
     }
 ]);

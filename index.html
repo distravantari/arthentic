@@ -18,10 +18,9 @@
 		</div>
 
 	  <!-- Modal -->
-	  <div class="modal fade fixed-left" id="myModal" role="dialog">
+	  <!-- <div class="modal fade fixed-left" id="myModal" role="dialog">
 	    <div class="modal-dialog">
 
-	      <!-- Modal content-->
 	      <div class="modal-content">
 	        <div class="modal-header">
 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -39,7 +38,7 @@
 	      </div>
 
 	    </div>
-	  </div>
+	  </div> -->
 
 	</div>
 
@@ -74,9 +73,32 @@
 		  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
 				</div>
 				<div class="col-md-1">
-					<button type="button" class="navbar-toggle" data-toggle="modal" data-target="#myModal" data-canvas="body">
+					<button type="button" class="navbar-toggle" onclick="users()" data-canvas="body">
 					<span class="fa fa-users"></span>
 					</button>
+					<script type="text/javascript">
+						function users(){
+						swal({
+							title: "Are you sure ?",
+							text: "you want to logout from this awesome apps?",
+							type: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Yes, please!",
+							cancelButtonText: "No, please this is to awesome!",
+							closeOnConfirm: false,
+							closeOnCancel: false },
+							function(isConfirm){
+								if (isConfirm) {
+									swal("logout!", "bye bye.", "success");
+									document.location.assign('http://localhost/arthentic/#/login');
+								}
+								else {
+									swal("Cancelled", "stay awesome", "error");
+								}
+							});
+						}
+					</script>
 				</div>
       </div>
 
