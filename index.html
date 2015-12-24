@@ -16,30 +16,6 @@
 	<body>
 		<div class="offcanvas-layer">
 		</div>
-
-	  <!-- Modal -->
-	  <!-- <div class="modal fade fixed-left" id="myModal" role="dialog">
-	    <div class="modal-dialog">
-
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	          <h4 class="modal-title">Options</h4>
-	        </div>
-	        <div class="modal-body">
-						<ul>
-		          <li><a href="#/profile" onclick="changeTitleHeader('RADICAL Profile')"><span class="fa fa-user"></span>Profile</li>
-							<li><a href="#/login" onclick="changeTitleHeader('Logout')"><span class="fa fa-sign-out"></span>Logout</li>
-						</ul>
-	        </div>
-	        <div class="modal-footer">
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        </div>
-	      </div>
-
-	    </div>
-	  </div> -->
-
 	</div>
 
     <!-- MENU LEFT BAR -->
@@ -91,7 +67,7 @@
 							function(isConfirm){
 								if (isConfirm) {
 									swal("logout!", "bye bye.", "success");
-									document.location.assign('http://localhost/arthentic/#/login');
+									document.location.assign('http://localhost:8080/arthentic/#/login');
 								}
 								else {
 									swal("Cancelled", "stay awesome", "error");
