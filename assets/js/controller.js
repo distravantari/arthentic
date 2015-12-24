@@ -6,6 +6,8 @@ var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oc
 appControllers.controller('MenuController',['$scope','$http',
     function($scope,$http){
 
+      $('.bars').removeClass('hidden');
+
       $scope.menu = [{}];
       var idx = 0;
       $scope.totalHarga = function() {
@@ -109,7 +111,7 @@ appControllers.controller('MenuController',['$scope','$http',
               // alert(obj.message);
               swal("Good job!", obj.message, "success");
               // document.location.reload();
-              $('.plusbtn').removeClass('hidden');
+              $('#btnplus').removeClass('hidden');
             }
             else {
               // alert("input tidak boleh kosong");
@@ -290,6 +292,7 @@ appControllers.controller('RegisterController',['$scope','$http',
 
 appControllers.controller('InvoiceController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       changeTitleHeader('Invoice');
     }
 ]);
@@ -298,6 +301,31 @@ appControllers.controller('DashboardController',['$scope','$http',
     function($scope,$http){
 
       $('.bars').removeClass('hidden');
+
+      $http.get('http://localhost:3000/api/menuTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
+  				$scope.order=data.message.length;
+          $(".order").text($scope.order);
+  				$scope.loading = false;
+  		});
+
+      $http.get('http://localhost:3000/api/membersTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(memberData){
+          $scope.member=memberData.message.length;
+          $(".member").text($scope.member);
+          $scope.loading = false;
+      });
+
+      $http.get('http://localhost:3000/api/usersTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(userData){
+          $scope.user=userData.message.length;
+          $(".user").text($scope.user);
+          $scope.loading = false;
+      });
+
+      $http.get('http://localhost:3000/api/ordersTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(orderData){
+          $scope.order=orderData.message.length;
+          $(".order").text($scope.order);
+          $scope.loading = false;
+      });
+
       changeTitleHeader('RADICAL DASHBOARD');
     }
 ]);
@@ -310,6 +338,7 @@ appControllers.controller('ProfileController',['$scope','$http',
 
 appControllers.controller('DailyReportsController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       changeTitleHeader('Daily Reports');
       $scope.dailys = [{}];
 
@@ -367,12 +396,14 @@ appControllers.controller('DailyReportsController',['$scope','$http',
 
 appControllers.controller('WeeklyReportsController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       changeTitleHeader('Weekly Reports');
     }
 ]);
 
 appControllers.controller('MonthlyReportsController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       changeTitleHeader('Monthly Reports');
     }
 ]);
@@ -380,6 +411,7 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
 
 appControllers.controller('OrderController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
 
       $scope.articles = [{}];
       var i = 0;
@@ -523,6 +555,7 @@ appControllers.controller('OrderController',['$scope','$http',
               if (obj.message === "success") {
                 // alert(obj.message);
                 swal("Good job!", obj.message, "success");
+                // $('.btnplus').removeClass('hidden');
               }
               else {
                 alert("id order tidak boleh kosong");
@@ -556,6 +589,8 @@ appControllers.controller('OrderController',['$scope','$http',
 
 appControllers.controller('EmployeesDataController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
+
       $scope.employees = [{}];
       var idx = 0;
 
@@ -713,6 +748,7 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
 
 appControllers.controller('SupplierDataController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       $scope.suppliers = [{}];
       var idx = 0;
 
@@ -869,6 +905,7 @@ appControllers.controller('SupplierDataController',['$scope','$http',
 
 appControllers.controller('MemberDataController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       $scope.members = [{}];
       var idx = 0;
 
@@ -1030,6 +1067,7 @@ appControllers.controller('MemberDataController',['$scope','$http',
 
 appControllers.controller('StockDetailController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       $scope.stocks = [{}];
       var idx = 0;
 
@@ -1181,6 +1219,7 @@ appControllers.controller('StockDetailController',['$scope','$http',
 
 var x;
 appControllers.controller('AspirasiController',['$scope','$http','$routeParams', function($scope,$http,$routeParams){
+  $('.bars').removeClass('hidden');
 		$scope.submitAspiration = function(){
 				// showLoader(true);
 				var name = $scope.form.name;
