@@ -1,6 +1,6 @@
 <div class='content'>
   <div class="container-fluid">
-    <h1>Data Member</h1>
+    <h1>Data <span style="color:orange">Member</span></h1>
     <div class="row">
       <div class="col-sm-1">
         <p>FILTER :</p>
@@ -45,10 +45,10 @@
                         <input type="text" ng-model="member.endmember" class="form-control bfh-number" placeholder="DD/MM/YYYY" value="{{member.endmember}}">
                       </td>
                       <td>
-                        <a href ng:click="update($index)" ng-class="updatebtn" class="btn btn-primary">Update</a>
+                        <a href ng:click="update($index)" ng-class="updatebtn" class="btn btn-primary" style="background-color:orange !important;border:none">Update</a>
                       </td>
                       <td>
-                        <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                        <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
                       </td>
                     </tr>
                     <!-- <tr class="success">
@@ -61,8 +61,8 @@
                     </tr> -->
                   </tbody>
                 </table>
-                <a href ng:click="tambah();updatebtn='hidden';plusbtn='hidden'" ng-class="plusbtn" class="btn btn-primary plusbtn">Tambah <i class="fa fa-plus"></i></a>
-                <a href ng:click="save()" class="btn btn-primary">Save </a>
+                <a href ng:click="tambah();updatebtn='hidden';plusbtn='hidden'" ng-class="plusbtn" class="btn btn-primary plusbtn" style="background-color:orange !important;border:none">Tambah <i class="fa fa-plus"></i></a>
+                <a href ng:click="save()" class="btn btn-primary" style="background-color:orange !important;border:none">Save </a>
               </div>
             </div>
 

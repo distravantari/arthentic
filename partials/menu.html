@@ -40,10 +40,10 @@
                       <input type="number" ng-model="menu.kuantitas" class="form-control bfh-number" min=0 value="{{menu.kuantitas}}">
                     </td>
                     <td>
-                      <a href ng:click="update($index)" ng-class="updatebtn" class="btn btn-primary">Update</a>
+                      <a href ng:click="update($index)" ng-class="updatebtn" class="btn btn-primary" style="background-color:orange !important;border:none">Update</a>
                     </td>
                     <td>
-                      <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                      <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
                     </td>
                   </tr>
                   <!-- <tr class="success">
@@ -56,8 +56,8 @@
                   </tr> -->
                 </tbody>
             </table>
-              <a href ng:click="tambah();updatebtn='hidden';plusbtn='hidden'" ng-class="plusbtn" class="btn btn-primary plusbtn">Tambah <i class="fa fa-plus"></i></a>
-              <a href ng:click="save()" class="btn btn-primary">Save</a>
+              <a href ng:click="tambah();updatebtn='hidden';plusbtn='hidden'" ng-class="plusbtn" class="btn btn-primary plusbtn" style="background-color:black !important;border:none">Tambah <i class="fa fa-plus"></i></a>
+              <a href ng:click="save()" class="btn btn-primary" style="background-color:black !important;border:none">Save</a>
         </div>
 
     </div>

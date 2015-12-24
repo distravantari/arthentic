@@ -38,13 +38,13 @@
                         <input type="number" ng-model="article.quantity" id="quantity" class="quantity form-control bfh-number" placeholder="0" min=0>
                       </td>
                       <td>
-                        <input type="number" ng-model="article.discount" id="discount" class="discount form-control bfh-number" placeholder="0" min=0>
+                        <input type="number" ng-model="article.discount" id="discount" class="discount form-control bfh-number" placeholder="%" min=0>
                       </td>
                       <td class="success">
                         <input type="number" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0" value="{{ confirm() | number : 2}}" readonly>
                       </td>
                       <td>
-                        <a href ng:click="delete($index)"><i class="fa fa-times delete"></i></a>
+                        <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
                       </td>
                     </tr>
                     <tr class="success">
@@ -80,9 +80,9 @@
                   </tbody>
                 </table>
                 <form>
-                <a href ng:click="tambah()" id="btnplus" class="btn btn-primary">Add <i class="fa fa-plus"></i></a>
-                <a href ng:click="save()" class="btn btn-primary">Save</a>
-                <a href ng:click="print()" class="btn btn-primary pull-right">Print Invoice</a>
+                <a href ng:click="tambah()" id="btnplus" class="btn btn-primary" style="background-color:black !important;border:none">Add <i class="fa fa-plus"></i></a>
+                <a href ng:click="save()" class="btn btn-primary" style="background-color:black !important;border:none">Save</a>
+                <a href ng:click="print()" class="btn btn-primary pull-right" style="background-color:orange !important;border:none">Print Invoice</a>
               </div>
             </div>
         </div>

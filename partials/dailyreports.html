@@ -11,6 +11,7 @@
                 <div class="col-md-3">
                   <a href ng:click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
                 </div>
+
                 <table class="table table-striped table-hover table-responsive">
                   <thead>
                     <tr>
@@ -22,7 +23,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="daily in dailys">
+                    <tr ng-repeat="daily in dailys" class="tables">
                       <td>
                         <input type="text" ng-model="daily.Id" class="form-control bfh-number" value="{{ daily.Id }}">
                       </td>
@@ -38,12 +39,8 @@
                       <td>
                         <input type="number" ng-model="daily.total" class="form-control bfh-number" min=0 value="{{ total($index) }}">
                       </td>
-                      <!-- <td>
-                        <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
-                      </td> -->
                     </tr>
                     <tr class="success">
-                      <th class="success"></th>
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success">Total Pendapatan Hari Ini</td>
