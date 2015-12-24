@@ -237,13 +237,15 @@ appControllers.controller('LoginController',['$scope','$http',
        });
       }
 
-      //  $(this).addClass('text-success');
+      $('.bars').addClass('hidden');
       changeTitleHeader('RADICAL LOGIN');
     }
 ]);
 
 appControllers.controller('RegisterController',['$scope','$http',
     function($scope,$http){
+      $('.bars').addClass('hidden');
+
       $scope.registeruser = function () {
         var user = $scope.form.username;
         var pass = $scope.form.password;
@@ -294,6 +296,8 @@ appControllers.controller('InvoiceController',['$scope','$http',
 
 appControllers.controller('DashboardController',['$scope','$http',
     function($scope,$http){
+
+      $('.bars').removeClass('hidden');
       changeTitleHeader('RADICAL DASHBOARD');
     }
 ]);
