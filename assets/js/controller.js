@@ -69,8 +69,9 @@ appControllers.controller('MenuController',['$scope','$http',
          },
          success: function(response){
            obj = JSON.parse(response);
-           alert(obj.message);
-           document.location.reload();
+          //  alert(obj.message);
+          swal({   title: "Sweet!",   text: "successfully updated"});
+          //  document.location.reload();
          },
          error: function(xhr, status, error){
            alert(error);
@@ -105,12 +106,14 @@ appControllers.controller('MenuController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "input menu berhasil dengan nama "+name) {
-              alert(obj.message);
-              document.location.reload();
+              // alert(obj.message);
+              swal("Good job!", obj.message, "success");
+              // document.location.reload();
               $('.plusbtn').removeClass('hidden');
             }
             else {
-              alert("input tidak boleh kosong");
+              // alert("input tidak boleh kosong");
+              swal({   title: "Alert!",   text: "input tidak boleh kosong.",   timer: 2000,   showConfirmButton: false });
             }
           },
           error: function(xhr, status, error){
@@ -136,7 +139,26 @@ appControllers.controller('MenuController',['$scope','$http',
          },
          success: function(response){
           idx--;
-          document.location.reload();
+          swal({
+             title: "Are you sure?",
+             text: "You will not be able to recover this imaginary file!",
+             type: "warning",   showCancelButton: true,
+             timer: 2000,
+             confirmButtonColor: "#DD6B55",
+             confirmButtonText: "Yes, delete it!",
+             cancelButtonText: "No, cancel plx!",
+             closeOnConfirm: false,
+             closeOnCancel: false },
+             function(isConfirm){
+               if (isConfirm) {
+                 swal("Deleted!", "Your file has been deleted.", "success");
+                 document.location.reload();
+               }
+               else {
+                  swal("Cancelled", "Your file is safe :)", "error");
+                }
+              });
+
          },
          error: function(xhr, status, error){
            alert(error);
@@ -494,7 +516,8 @@ appControllers.controller('OrderController',['$scope','$http',
             success: function(response){
               obj = JSON.parse(response)
               if (obj.message === "success") {
-                alert(obj.message);
+                // alert(obj.message);
+                swal("Good job!", obj.message, "success");
               }
               else {
                 alert("id order tidak boleh kosong");
@@ -619,8 +642,8 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "Berhasil Update") {
-              alert(obj.message);
-              document.location.reload();
+              swal({   title: "Sweet!",   text: "successfully updated"});
+              // document.location.reload();
             }
             else {
               alert("input tidak boleh kosong");
@@ -777,7 +800,8 @@ appControllers.controller('SupplierDataController',['$scope','$http',
            success: function(response){
              obj = JSON.parse(response);
              if (obj.message === "Berhasil Update Supplier") {
-               alert(obj.message);
+              //  alert(obj.message);
+              swal({   title: "Sweet!",   text: "successfully updated"});
                document.location.reload();
              }
              else {
@@ -817,7 +841,8 @@ appControllers.controller('SupplierDataController',['$scope','$http',
               if (obj.message === "input supplier berhasil") {
                 alert(obj.message);
                 $('.plusbtn').removeClass('.hidden');
-                document.location.reload();
+                swal("Good job!", obj.message, "success");
+                // document.location.reload();
               }
               else {
                 alert("input tidak boleh kosong");
@@ -934,7 +959,8 @@ appControllers.controller('MemberDataController',['$scope','$http',
          success: function(response){
            obj = JSON.parse(response);
            if (obj.message === "Berhasil Update Customer") {
-             alert(obj.message);
+            //  alert(obj.message);
+            swal({   title: "Sweet!",   text: "successfully updated"});
              document.location.reload();
            }
            else {
@@ -1087,7 +1113,8 @@ appControllers.controller('StockDetailController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "Berhasil mengganti nama ") {
-              alert("Data telah di Update");
+              // alert("Data telah di Update");
+              swal({   title: "Sweet!",   text: "successfully updated"});
               document.location.reload();
             }
             else {
