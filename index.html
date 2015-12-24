@@ -20,37 +20,67 @@
 
     <!-- MENU LEFT BAR -->
 		<nav id="left-menu" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
-			<div class="navmenu-brand logo" href="#">
-				<img src="assets/img/radion.png" width="95%">
+			<div class="navmenu-brand logo" href="#" style="">
+				<img src="assets/img/radion.png" width="95%" class="img-thumbnail center" style="background-color:#424242 !important; margin-left:5px;">
 			</div>
 			<ul class="nav navmenu-nav">
 				<li class="focus"><a href="#/dashboard" onclick="changeTitleHeader('RADICAL Dashboard')">Dashboard</a></li>
-				<li class="focus"><a href="#/dailyreports" onclick="changeTitleHeader('RADICAL Reports')">Daily Reports</a></li>
-				<li class="focus"><a href="#/weeklyreports" onclick="changeTitleHeader('RADICAL Reports')">Weekly Reports</a></li>
-				<li class="focus"><a href="#/monthlyreports" onclick="changeTitleHeader('RADICAL Reports')">Monthly Reports</a></li>
-				<li class="focus"><a href="#/invoice" onclick="changeTitleHeader('RADICAL Invoice')">Invoice</a></li>
+				<li><a href="" onclick="reportsClick()">Reports</a></li>
+				<ul class="nav reports-detail hidden">
+					<li class=""><a href="#/dailyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Daily Reports</a></li>
+					<li class=""><a href="#/weeklyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Weekly Reports</a></li>
+					<li class=""><a href="#/monthlyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Monthly Reports</a></li>
+				</ul>
+				<!-- <li class="focus"><a href="#/invoice" onclick="changeTitleHeader('RADICAL Invoice')">Invoice</a></li> -->
 				<li class="focus"><a href="#/menu" onclick="changeTitleHeader('RADICAL Menu')">Menu</a></li>
 				<li class="focus"><a href="#/order" onclick="changeTitleHeader('RADICAL Order')">Order</a></li>
 				<li class="focus"><a href="#/stockdetail" onclick="changeTitleHeader('RADICAL Order')">Stock Detail</a></li>
-				<li class="focus"><a href="#/employeesdata" onclick="changeTitleHeader(RADICAL Data)">Employees Data</a></li>
-				<li class="focus"><a href="#/supplierdata" onclick="changeTitleHeader(RADICAL Data)">Supplier Data</a></li>
-				<li class="focus"><a href="#/datamember" onclick="changeTitleHeader(RADICAL Data)">Member Data</a></li>
+				<li class="focus"><a href="" onclick="dataClick()">Data</a></li>
+				<ul class="nav data-detail hidden">
+					<li class="focus"><a href="#/employeesdata" onclick="changeTitleHeader(RADICAL Data)"  style="color:orange !important">Employees Data</a></li>
+					<li class="focus"><a href="#/supplierdata" onclick="changeTitleHeader(RADICAL Data)"  style="color:orange !important">Supplier Data</a></li>
+					<li class="focus"><a href="#/datamember" onclick="changeTitleHeader(RADICAL Data)"  style="color:orange !important">Member Data</a></li>
+				</ul>
 				<li class="focus"><a href="http://radiontech.net" onclick="changeTitleHeader('About RADICAL')" >About RadionTechnology</a></li>
 			</ul>
 		</nav>
+
+		<script type="text/javascript">
+			var temp = 0;
+			var tempData = 0;
+			function reportsClick(){
+				if (temp == 0) {
+					$('.reports-detail').removeClass('hidden');
+					temp++;
+				}else{
+					$('.reports-detail').addClass('hidden');
+					temp =0;
+				}
+			}
+
+			function dataClick() {
+				if (tempData == 0) {
+					$('.data-detail').removeClass('hidden');
+					tempData++;
+				}else{
+					$('.data-detail').addClass('hidden');
+					tempData =0;
+				}
+			}
+		</script>
 
 		<div class="wrapper-offcanvas">
 
 			<div class="navbar navbar-default navbar-fixed-top">
         <div class="col-md-11">
 						<button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#left-menu" data-canvas="body">
-		  			<span class="fa fa-bars"></span>
+		  			<span ng-model="bars" class="fa fa-bars "></span>
 		  			</button>
 		  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
 				</div>
 				<div class="col-md-1">
 					<button type="button" class="navbar-toggle" onclick="users()" data-canvas="body">
-					<span class="fa fa-sign-out"></span>
+					<span class="fa fa-sign-out fa-1	x"></span>
 					</button>
 					<script type="text/javascript">
 						function users(){

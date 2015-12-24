@@ -223,7 +223,7 @@ appControllers.controller('LoginController',['$scope','$http',
               alert(obj.mesage);
             }
             else {
-              window.location.assign(domain+":8080/arthentic/#/dashboard");
+              window.location.assign(domain+"/arthentic/#/dashboard");
             }
           },
           error: function(xhr, status, error){

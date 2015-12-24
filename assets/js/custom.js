@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.offcanvas, .offcanvas-layer').click(function(){
+    $('.offcanvas-layer').click(function(){
         $('[data-toggle="offcanvas"]').toggleCanvas();
     });
     $('[data-toggle="offcanvas"]').click(function () {
