@@ -50,7 +50,7 @@
                         <input type="number" ng-model="week.Quantity" class="form-control bfh-number" min=0 value="{{ week.Quantity }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhir | number:2 }}">
+                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhi }}">
                       </td>
                       <td>
                         <input type="number" ng-model="week.total" class="form-control bfh-number" min=0 value="{{ total($index) }}">
@@ -59,8 +59,8 @@
                     <tr class="success">
                       <th class="success"></th>
                       <td class="success"></td>
-                      <td class="success">{{ NombreArticle() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
+                      <td class="success">Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }}</td>
                       <td class="success"></td>
                     </tr>
                   </tbody>

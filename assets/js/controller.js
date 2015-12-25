@@ -222,10 +222,21 @@ appControllers.controller('LoginController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "Nama atau password salah") {
-              alert(obj.message);
+              // alert(obj.message);
+              swal({
+                title: "Are you sure you enter it right?",
+                text: "You enter a wrong username and password!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Try again",
+                closeOnConfirm: false }, function(){
+                  // swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                });
             }
             else {
-              alert(obj.message);
+              // alert(obj.message);
+              swal("Good Job!", obj.message, "success")
               window.location.assign(domain+"/arthentic/#/dashboard");
             }
           },
@@ -364,6 +375,10 @@ appControllers.controller('DailyReportsController',['$scope','$http',
         $('.bars').removeClass('hidden');
         var tanggal = $scope.input.tanggal;
 
+        // split input
+        var temp = tanggal.split("/");
+        tanggal = temp[2]+"/"+temp[0]+"/"+temp[1];
+
         $.ajax({
           url: domain + ':3000/api/hitungHarian',
           dataType: 'JSON',
@@ -398,40 +413,65 @@ appControllers.controller('DailyReportsController',['$scope','$http',
 
 appControllers.controller('WeeklyReportsController',['$scope','$http',
     function($scope,$http){
-      $('.bars').removeClass('hidden');
-      var startdate = $scope.input.startdate;
-      var enddate = $scope.input.enddate;
+      $scope.weekly = [{}];
 
-      $.ajax({
-        url: domain + ':3000/api/hitungMingguan',
-        dataType: 'JSON',
-        method: 'POST',
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        data: {
-          startdate: startdate,
-          enddate: enddate,
-          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-        },
-        success: function(response){
-          // alert(response.message.length);
-          for (var i = 0; i < response.message.length; i++) {
-            $scope.dailys.push(response.message[i]);
-          }
-          $scope.weekly.splice(0, 1);
-          $scope.loading = false;
-          // alert(response.message[0].Id);
-          // window.location.assign(domain+":8080/arthentic/#/dashboard")
-        },
-        error: function(xhr, status, error){
-          alert(error);
-          // document.location.reload();
-        },
-        complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-         //do smth if you need
-        //  document.location.reload();
-       }
-     });
+      $scope.total = function (idx) {
+        var price = $scope.weekly[idx].HargaAkhir;
+        var quantity = $scope.weekly[idx].Quantity;
 
+        $scope.weekly[idx].total = price*quantity;
+      }
+
+      $scope.SubTotal = function () {
+        var resultHT =0;
+
+         angular.forEach($scope.weekly, function (week) {
+           resultHT += week.total;
+         });
+
+        return resultHT;
+      }
+
+      $scope.proceed = function () {
+        $('.bars').removeClass('hidden');
+        var startdate = $scope.input.startdate;
+        var enddate = $scope.input.enddate;
+
+        // split startdate
+        var tempS = startdate.split("/");
+        startdate = tempS[2]+"/"+tempS[0]+"/"+tempS[1];
+
+        // split enddate
+        var tempE = enddate.split("/");
+        enddate = tempE[2]+"/"+tempE[0]+"/"+tempE[1];
+
+        $.ajax({
+          url: domain + ':3000/api/hitungMingguan',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            startdate: startdate,
+            enddate: enddate,
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            for (var i = 0; i < response.message.length; i++) {
+              $scope.weekly.push(response.message[i]);
+            }
+            $scope.weekly.splice(0, 1);
+            $scope.loading = false;
+          },
+          error: function(xhr, status, error){
+            alert(error);
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+        });
+      }
       changeTitleHeader('Weekly Reports');
     }
 ]);
@@ -609,14 +649,38 @@ appControllers.controller('OrderController',['$scope','$http',
      }
 
      $scope.print = function () {
+       for (var i = 0; i < $scope.articles.length; i++) {
+         var name = $scope.articles[i].titre;
+         var quantity = $scope.articles[i].quantity;
+         var total = $scope.articles[i].total;
+
+         $.ajax({
+           url: domain + ':3000/api/insertInvoice',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             name:name,
+             kuantitas:quantity,
+             satuan:total,
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response)
+             if (obj.message === "success") {
+             }
+             else {
+              //  alert("id order tidak boleh kosong");
+             }
+           },
+           error: function(xhr, status, error){
+           },
+           complete: function(){}
+        });
+
+       }
        document.location.assign(domain+':8080/arthentic/#/invoice');
      }
-
-    //  $http.get(domain + '/getIdOrder?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2ODI5NzR9.DDi364QgxovNjg17YhVTyIb-BVbp9Xh0Nzzk4cpLXIw').success(function(data){
- 	// 			ord=data[0].message.nomerOrder;
-    //     ord++;
- 	// 			$scope.loading = false;
- 	// 	});
 
       changeTitleHeader('RADICAL Order');
     }
