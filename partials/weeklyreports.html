@@ -8,12 +8,22 @@
               <div class="col-md-12">
                 <div class="col-md-3">
                   start date :
-                  <input type="text" ng-model="input.startdate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                  <input type="text" ng-model="input.startdate" name="date" id="datepicker" class="form-control bfh-number" placeholder="YYYY/MM/DD">
                 </div>
+                <script>
+                $(function() {
+                  $( "#datepicker" ).datepicker();
+                });
+                </script>
                   <div class="col-md-3">
                     end date :
-                    <input type="text" ng-model="input.enddate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                    <input type="text" ng-model="input.enddate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD" id="datepicker2">
                   </div>
+                  <script>
+                  $(function() {
+                    $( "#datepicker2" ).datepicker();
+                  });
+                  </script>
                 <div class="col-md-3">
                   <br>
                   <a href ng:click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>

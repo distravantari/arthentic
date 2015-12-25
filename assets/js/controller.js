@@ -221,10 +221,11 @@ appControllers.controller('LoginController',['$scope','$http',
           },
           success: function(response){
             obj = JSON.parse(response);
-            if (obj.mesage === "Nama atau password salah") {
-              alert(obj.mesage);
+            if (obj.message === "Nama atau password salah") {
+              alert(obj.message);
             }
             else {
+              alert(obj.message);
               window.location.assign(domain+"/arthentic/#/dashboard");
             }
           },
