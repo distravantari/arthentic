@@ -31,6 +31,7 @@
 					<li class=""><a href="#/dailyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Daily Reports</a></li>
 					<li class=""><a href="#/weeklyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Weekly Reports</a></li>
 					<li class=""><a href="#/monthlyreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Monthly Reports</a></li>
+					<li class=""><a href="#/expensesreports" onclick="changeTitleHeader('RADICAL Reports')" style="color:orange !important">Expenses Reports</a></li>
 				</ul>
 				<!-- <li class="focus"><a href="#/invoice" onclick="changeTitleHeader('RADICAL Invoice')">Invoice</a></li> -->
 				<li class="focus"><a href="#/menu" onclick="changeTitleHeader('RADICAL Menu')">Menu</a></li>
@@ -42,6 +43,7 @@
 					<li class="focus"><a href="#/supplierdata" onclick="changeTitleHeader(RADICAL Data)"  style="color:orange !important">Supplier Data</a></li>
 					<li class="focus"><a href="#/datamember" onclick="changeTitleHeader(RADICAL Data)"  style="color:orange !important">Member Data</a></li>
 				</ul>
+				<li class="focus"><a href="#/expenses" onclick="changeTitleHeader('RADICAL Expenses')" >Expenses</a></li>
 				<li class="focus"><a href="http://radiontech.net" onclick="changeTitleHeader('About RADICAL')" >About RadionTechnology</a></li>
 			</ul>
 		</nav>
@@ -80,17 +82,17 @@
 		  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
 				</div>
 				<div class="col-md-1" style="padding-top:10px">
-					<h5 style="color:white">hi,<span id="username"></span></h5>
+					<h5 style="color:white" class="hidden bars">hi,<span id="username"></span></h5>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="navbar-toggle" onclick="users()" data-canvas="body">
+					<button type="button" class="navbar-toggle" onclick="logout()" data-canvas="body">
 					<span class="fa fa-sign-out fa-1x hidden bars"></span>
 					</button>
 					<button type="button" class="navbar-toggle" onclick="window.location.href='#/setting'" data-canvas="body">
 					<span class="fa fa-asterisk fa-1x hidden bars"></span>
 					</button>
 					<script type="text/javascript">
-						function users(){
+						function logout(){
 						swal({
 							title: "LOGOUT ?",
 							text: "you want to logout from this awesome apps?",
@@ -110,6 +112,29 @@
 									swal("Cancelled", "stay awesome", "error");
 								}
 							});
+							var user = $('#username').text();
+							$.ajax({
+			          url: domain + ':3000/api/updateStatus',
+			          dataType: 'text',
+			          method: 'POST',
+			          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			          data: {
+			            nama: user,
+			            status: "offline",
+			            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+			          },
+			          success: function(response){
+			            obj = JSON.parse(response);
+			          },
+			          error: function(xhr, status, error){
+			            alert(error);
+			            // document.location.reload();
+			          },
+			          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+			           //do smth if you need
+			          //  document.location.reload();
+			         }
+			       });
 						}
 					</script>
 				</div>

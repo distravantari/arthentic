@@ -1,10 +1,16 @@
 var appControllers = angular.module('appControllers', []);
 var domain = 'http://localhost';
-var fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var fullMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 appControllers.controller('MenuController',['$scope','$http',
     function($scope,$http){
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $('.bars').removeClass('hidden');
 
@@ -269,6 +275,33 @@ appControllers.controller('MenuController',['$scope','$http',
 
 appControllers.controller('LoginController',['$scope','$http',
     function($scope,$http){
+      $scope.updateStatus = function () {
+        var user = $scope.form.username;
+        $.ajax({
+          url: domain + ':3000/api/updateStatus',
+          dataType: 'text',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            nama: user,
+            status: "online",
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            obj = JSON.parse(response);
+            // alert(user);
+          },
+          error: function(xhr, status, error){
+            alert(error);
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+       });
+      }
+
 
       $scope.userlogin = function(){
         var user = $scope.form.username;
@@ -372,6 +405,12 @@ appControllers.controller('InvoiceController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
 
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
       $scope.invoice = [{}];
 
       $http.get('http://localhost:3000/api/invoices?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ').success(function(data){
@@ -397,6 +436,12 @@ appControllers.controller('DashboardController',['$scope','$http',
     function($scope,$http){
 
       $('.bars').removeClass('hidden');
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $http.get('http://localhost:3000/api/menuTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
   				$scope.order=data.message.length;
@@ -437,6 +482,12 @@ appControllers.controller('DailyReportsController',['$scope','$http',
       $('.bars').removeClass('hidden');
       changeTitleHeader('Daily Reports');
       $scope.dailys = [{}];
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $scope.total = function (idx) {
         var price = $scope.dailys[idx].HargaAkhir;
@@ -498,6 +549,12 @@ appControllers.controller('DailyReportsController',['$scope','$http',
 appControllers.controller('WeeklyReportsController',['$scope','$http',
     function($scope,$http){
       $scope.weekly = [{}];
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $scope.total = function (idx) {
         var price = $scope.weekly[idx].HargaAkhir;
@@ -563,14 +620,167 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
 appControllers.controller('MonthlyReportsController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
       changeTitleHeader('Monthly Reports');
     }
 ]);
 
+appControllers.controller('ExpensesController',['$scope','$http',
+    function($scope,$http){
+      $('.bars').removeClass('hidden');
+      $scope.expenses = [{}];
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+      var i=0;
+      $scope.tambah = function() {
+        i++;
+        $scope.expenses.push({
+          id: '',
+          reference: '',
+          titre: '',
+          price: 0,
+          quantity: 0,
+          discount: 0,
+          total:0
+        });
+        ord++;
+      };
+
+      $scope.save = function () {
+        for (var i = 0; i < $scope.expenses.length; i++) {
+           var bulanexp = $scope.expenses[i].bulan;
+           var tahunexp = $scope.expenses[i].tahun;
+           var namaexp = $scope.expenses[i].namaPengeluaran;
+           var jumlahexp = $scope.expenses[i].jumlah;
+
+           $.ajax({
+             url: domain + ':3000/api/insertPengeluaran',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               bulan:bulanexp,
+               tahun:tahunexp,
+               nama:namaexp,
+               jumlah:jumlahexp,
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response)
+               if (obj.message === "berhasil input data pengeluaran") {
+                 // alert(obj.message);
+                 swal("Good job!", obj.message, "success");
+                 // $('.btnplus').removeClass('hidden');
+                 document.location.reload();
+               }
+               else {
+                 alert("input tidak boleh kosong");
+               }
+             },
+             error: function(xhr, status, error){
+               alert(error);
+               // document.location.reload();
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        }
+      }
+
+      changeTitleHeader('Expenses');
+    }
+]);
+
+appControllers.controller('ExpensesReportsController',['$scope','$http',
+    function($scope,$http){
+      $('.bars').removeClass('hidden');
+      $scope.expensesReports = [{}];
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
+      $scope.getMonth = function () {
+        var tanggalExpenses = $scope.input.tanggal;
+        // split input
+        var temp = tanggalExpenses.split("/");
+        // tanggalExpenses = temp[2]+"/"+temp[0];
+        var mmExpenses = temp[0]-1;
+        return fullMonths[mmExpenses];
+      }
+
+      $scope.SubTotal = function () {
+        var resultHT =0;
+
+         angular.forEach($scope.expensesReports, function (expReport) {
+           resultHT += expReport.jumlah;
+         });
+
+        return resultHT;
+      }
+
+      $scope.proceed = function () {
+        var tanggalExpenses = $scope.input.tanggal;
+        // split input
+        var temp = tanggalExpenses.split("/");
+        // tanggalExpenses = temp[2]+"/"+temp[0];
+        var mmExpenses = temp[0];
+        var yyExpenses = temp[2];
+
+        $.ajax({
+          url: domain + ':3000/api/showPengeluaran',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            bulan:Number(mmExpenses),
+            tahun:Number(yyExpenses),
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            for (var i = 0; i < response.message.length; i++) {
+              $scope.expensesReports.push(response.message[i]);
+            }
+            $scope.expensesReports.splice(0, 1);
+            idx = $scope.expensesReports.length-1;
+            $scope.loading = false;
+          },
+          error: function(xhr, status, error){
+            // alert(error);
+            throw error;
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+       });
+      }
+      changeTitleHeader('Expenses Reports');
+    }
+]);
 
 appControllers.controller('OrderController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $scope.articles = [{}];
       var i = 0;
@@ -779,6 +989,12 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
 
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
       $scope.employees = [{}];
       var idx = 0;
 
@@ -940,6 +1156,12 @@ appControllers.controller('SupplierDataController',['$scope','$http',
       $scope.suppliers = [{}];
       var idx = 0;
 
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
       $.ajax({
         url: domain + ':3000/api/showSupplier',
         dataType: 'json',
@@ -1096,6 +1318,12 @@ appControllers.controller('MemberDataController',['$scope','$http',
       $('.bars').removeClass('hidden');
       $scope.members = [{}];
       var idx = 0;
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $.ajax({
         url: domain + ':3000/api/showCustomer',
@@ -1258,6 +1486,12 @@ appControllers.controller('SettingController',['$scope','$http',
       $('.bars').removeClass('hidden');
       $scope.history = [{}];
 
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
+
       $.ajax({
         url: domain + ':3000/api/showHistory',
         dataType: 'json',
@@ -1292,6 +1526,12 @@ appControllers.controller('StockDetailController',['$scope','$http',
       $('.bars').removeClass('hidden');
       $scope.stocks = [{}];
       var idx = 0;
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+  				// $('#username').text(data.message.nama);
+            $('#username').html(data.message[0].nama);
+            // alert(data.message[0].nama);
+  		});
 
       $.ajax({
         url: domain + ':3000/api/showstok',

@@ -44,5 +44,5 @@ function loadImage(){
 }
 
 function changeTitleHeader(title){
-    $('#top-header').html(title);
+    $('#top-header').html(title);  
 }
