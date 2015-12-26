@@ -11,12 +11,12 @@
                     </div>
                     <div class="col-sm-9 text-right">
                         <a class="btn btn-sm btn-default btn-outline" href="#">PRINT</a>
-                        <a class="btn btn-sm btn-default btn-outline" href="#">PDF</a>
+                        <!-- <a class="btn btn-sm btn-default btn-outline" href="#">PDF</a> -->
                         <a class="btn btn-sm btn-danger btn-outline" href="#">DELETE</a>
                     </div>
                 </div>
                 <hr/>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-sm-4">
                         <h4 class="heading_b"><span class="heading_text">From:</span></h4>
                         <address>
@@ -38,7 +38,7 @@
                     <div class="col-sm-4">
                         <div id="invoice_qrcode" class="qrcode" ng-init="qr_base_size=160;qr_text='http://themeforest.net/user/tzd/portfolio'"></div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table table-yuk2 table-invoices">
@@ -46,28 +46,16 @@
                                 <tr>
                                     <th>Description</th>
                                     <th class="cw text-center">Quantity</th>
-                                    <th class="cw text-center">Rate</th>
-                                    <th class="cw text-center">Amount (USD)</th>
+                                    <th class="cw text-center">Discount</th>
+                                    <th class="cw text-center">Amount (RP)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Quibusdam optio deleniti et harum adipisci.</td>
-                                    <td class="text-center">6</td>
-                                    <td class="text-center">120</td>
-                                    <td class="text-center"><strong>720</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Culpa blanditiis architecto blanditiis corporis suscipit.</td>
-                                    <td class="text-center">2</td>
-                                    <td class="text-center">78</td>
-                                    <td class="text-center"><strong>156</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Nobis dolorum et in est.</td>
-                                    <td class="text-center">10</td>
-                                    <td class="text-center">43</td>
-                                    <td class="text-center"><strong>430</strong></td>
+                                <tr ng-repeat="inv in invoice">
+                                    <td class="text-center" ng-model="inv.name" value="{{ inv.name }}"></td>
+                                    <td class="text-center" ng-model="inv.quantitas" value="{{ inv.quantitas }}"></td>
+                                    <td class="text-center" ng-model="inv.discount" value="{{ inv.discount }}"></td>
+                                    <td class="text-center" ng-model="inv.name" value="{{ inv.name }}"></td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -80,7 +68,7 @@
                                     <td class="text-center"><strong>126.00</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right text-muted">Shipping</td>
+                                    <td colspan="3" class="text-right text-muted">Services</td>
                                     <td class="text-center"><strong>21.49</strong></td>
                                 </tr>
                                 <tr class="grand_total">

@@ -221,7 +221,7 @@ appControllers.controller('LoginController',['$scope','$http',
           },
           success: function(response){
             obj = JSON.parse(response);
-            if (obj.message === "Nama atau password salah") {
+            if (obj.message === "Nama atau password salah ") {
               // alert(obj.message);
               swal({
                 title: "Are you sure you enter it right?",
@@ -231,7 +231,7 @@ appControllers.controller('LoginController',['$scope','$http',
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Try again",
                 closeOnConfirm: false }, function(){
-                  // swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                  swal("another chances!", "we give you another chances.", "success");
                 });
             }
             else {
@@ -305,6 +305,15 @@ appControllers.controller('RegisterController',['$scope','$http',
 appControllers.controller('InvoiceController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
+
+      $scope.invoice = [{}];
+
+      $http.get('http://localhost:3000/api/invoices?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ').success(function(data){
+
+            $scope.invoice = data.message;
+  				$scope.loading = false;
+  		});
+
       changeTitleHeader('Invoice');
     }
 ]);
@@ -650,9 +659,11 @@ appControllers.controller('OrderController',['$scope','$http',
 
      $scope.print = function () {
        for (var i = 0; i < $scope.articles.length; i++) {
+
          var name = $scope.articles[i].titre;
          var quantity = $scope.articles[i].quantity;
          var total = $scope.articles[i].total;
+         var diskon = $scope.articles[i].discount;
 
          $.ajax({
            url: domain + ':3000/api/insertInvoice',
@@ -663,6 +674,7 @@ appControllers.controller('OrderController',['$scope','$http',
              name:name,
              kuantitas:quantity,
              satuan:total,
+             diskon:diskon,
              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
            },
            success: function(response){
