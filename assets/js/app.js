@@ -65,6 +65,10 @@ unparApp.config(['$routeProvider',
           'templateUrl': 'partials/stockdetail.html',
           'controller': 'StockDetailController' //capital awal dan belakang
         }).
+        when('/setting', {
+          'templateUrl': 'partials/setting.html',
+          'controller': 'SettingController' //capital awal dan belakang
+        }).
         otherwise({
             'redirectTo': '/login'
         });

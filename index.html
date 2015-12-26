@@ -73,15 +73,21 @@
 		<div class="wrapper-offcanvas">
 
 			<div class="navbar navbar-default navbar-fixed-top">
-        <div class="col-md-11">
+        <div class="col-md-9">
 						<button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#left-menu" data-canvas="body">
 		  			<span class="bars fa fa-bars hidden"></span>
 		  			</button>
 		  			<h1 id="top-header" style="padding-left:5px; display:inline-block;" class= "header-top-nav">RADICAL POS</h1>
 				</div>
-				<div class="col-md-1">
+				<div class="col-md-1" style="padding-top:10px">
+					<h5 style="color:white">hi,<span id="username"></span></h5>
+				</div>
+				<div class="col-md-2">
 					<button type="button" class="navbar-toggle" onclick="users()" data-canvas="body">
 					<span class="fa fa-sign-out fa-1x hidden bars"></span>
+					</button>
+					<button type="button" class="navbar-toggle" onclick="window.location.href='#/setting'" data-canvas="body">
+					<span class="fa fa-asterisk fa-1x hidden bars"></span>
 					</button>
 					<script type="text/javascript">
 						function users(){
@@ -92,7 +98,7 @@
 							showCancelButton: true,
 							confirmButtonColor: "#DD6B55",
 							confirmButtonText: "Yes, please!",
-							cancelButtonText: "No, please this is to awesome!",
+							cancelButtonText: "No, please this is too awesome!",
 							closeOnConfirm: false,
 							closeOnCancel: false },
 							function(isConfirm){

@@ -16,7 +16,7 @@
                       <th>Price</th>
                       <th>Quantity</th>
                       <th>Discount(%)</th>
-                      <th>Total Satuan</th>
+                      <th>Total</th>
                       <th>Remove</th>
                     </tr>
                   </thead>
@@ -29,10 +29,10 @@
                         <input type="text" ng-model="article.reference" id="idmenu" class="idmenu form-control bfh-number" placeholder="MNx">
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" value="{{ getMenuById() }}" readonly>
+                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" value="{{ getMenuById($index) }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" value="{{ getMenuById() }}" readonly>
+                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" value="{{ getMenuById($index) }}" readonly>
                       </td>
                       <td>
                         <input type="number" ng-model="article.quantity" id="quantity" class="quantity form-control bfh-number" placeholder="0" min=0>
@@ -41,7 +41,7 @@
                         <input type="number" ng-model="article.discount" id="discount" class="discount form-control bfh-number" placeholder="%" min=0>
                       </td>
                       <td class="success">
-                        <input type="number" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0" value="{{ confirm() | number : 2}}" readonly>
+                        <input type="number" ng-model="article.total" id="total"  class="total form-control bfh-number" placeholder="0" value="{{ confirm($index) | number : 2}}" readonly>
                       </td>
                       <td>
                         <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
@@ -80,7 +80,7 @@
                   </tbody>
                 </table>
                 <form>
-                <a href ng:click="tambah();plusbtn='hidden'" ng-class="plusbtn" id="btnplus" class="btn btn-primary" style="background-color:black !important;border:none">Add <i class="fa fa-plus"></i></a>
+                <a href ng:click="tambah();" ng-class="plusbtn" id="btnplus" class="btn btn-primary" style="background-color:black !important;border:none">Add <i class="fa fa-plus"></i></a>
                 <a href ng:click="save();plusbtn=''" class="btn btn-primary" style="background-color:black !important;border:none">Save</a>
                 <a href ng:click="print()" class="btn btn-primary pull-right" style="background-color:orange !important;border:none">Print Invoice</a>
               </div>
