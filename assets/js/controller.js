@@ -620,12 +620,130 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
 appControllers.controller('MonthlyReportsController',['$scope','$http',
     function($scope,$http){
       $('.bars').removeClass('hidden');
+      $scope.incomes = [{}];
+      $scope.exps = [{}];
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
   				// $('#username').text(data.message.nama);
             $('#username').html(data.message[0].nama);
             // alert(data.message[0].nama);
   		});
+
+      $scope.getMonth = function () {
+        var date = $scope.input.month;
+
+        // split input
+        var temp = date.split("/");
+        var mnth = temp[0]-1;
+        return fullMonths[mnth];
+      }
+
+      $scope.totalPendapatan = function () {
+        var resultHT =0;
+
+         angular.forEach($scope.incomes, function (income) {
+           resultHT += income.hargaAkhir;
+         });
+        //  $scope.income.pendapatan = resultHT;
+        return resultHT;
+      }
+
+      $scope.totalPengeluaran = function () {
+        var resultHT =0;
+
+         angular.forEach($scope.exps, function (exp) {
+           resultHT += exp.jumlah;
+         });
+        //  $scope.exp.pengeluaran = resultHT;
+        return resultHT;
+      }
+      var tax;
+      $scope.getTax = function () {
+        $.ajax({
+          url: domain + ':3000/api/getPajakPendapatan',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            tax = response.message[0].pajakPendapatan;
+          },
+          error: function(xhr, status, error){
+            alert(error);
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+        });
+        return tax/100;
+      }
+
+      //hitung pendapatan Bulanan
+      $scope.proceed = function () {
+        var date = $scope.input.month;
+
+        // split input
+        var temp = date.split("/");
+        var mmMon = temp[0];
+        var yyMon = temp[2];
+        $.ajax({
+          url: domain + ':3000/api/hitungBulanan',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            bulan: mmMon,
+            tahun: yyMon,
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            for (var i = 0; i < response.message.length; i++) {
+              $scope.incomes.push(response.message[i]);
+            }
+            $scope.incomes.splice(0, 1);
+            $scope.loading = false;
+          },
+          error: function(xhr, status, error){
+            alert(error);
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+        });
+        // show pengeluaran bulan
+        $.ajax({
+          url: domain + ':3000/api/showPengeluaran',
+          dataType: 'JSON',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            bulan: mmMon,
+            tahun: yyMon,
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            for (var i = 0; i < response.message.length; i++) {
+              $scope.exps.push(response.message[i]);
+            }
+            $scope.exps.splice(0, 1);
+            $scope.loading = false;
+          },
+          error: function(xhr, status, error){
+            alert(error);
+            // document.location.reload();
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+        });
+      }
 
       changeTitleHeader('Monthly Reports');
     }

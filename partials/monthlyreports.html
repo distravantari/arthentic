@@ -1,13 +1,12 @@
-<div class='content'>
+<div class='content' style="margin-bottom:100px;">
   <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-
-          <h1><span style="color:black">Monthly</span> <span style="color:orange">Reports</span></h1>
+          <h1><span style="color:black">Income</span> <span style="color:orange">Reports</span></h1>
             <div class="content">
               <div class="col-md-12">
                 <div class="col-md-3">
-                  <input type="text" ng-model="input.tanggal" id="datepicker" name="date" class="form-control bfh-number" placeholder="insert Month">
+                  <input type="text" ng-model="input.month" id="datepicker" name="date" class="form-control bfh-number" placeholder="Insert Month">
                   <script>
                   $(function() {
                     $( "#datepicker" ).datepicker();
@@ -15,12 +14,18 @@
                   </script>
                 </div>
                 <div class="col-md-3">
-                  <a href ng:click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
+                  <a href ng:click="proceed();getmonthspan=''" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
                 </div>
-                <table class="table table-striped table-hover table-responsive">
+                <table class="table table-striped table-hover table-responsive" style="margin-top:100px">
                   <thead>
                     <tr>
-                      <th>ID Menu</th>
+                      <th colspan="5" style="font-size:25px">
+                        <p class="text-left">
+                          Pendapatan Bulan <span ng-model="getmonthspan=''" ng-class="getmonthspan">{{ getMonth() }}</span>
+                        </p>
+                      </th>
+                    </tr>
+                    <tr>
                       <th>Nama Menu</th>
                       <th>Kuantitas Terjual</th>
                       <th>Harga</th>
@@ -28,34 +33,105 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="article in articles">
+                    <tr ng-repeat="income in incomes">
                       <td>
-                        <input type="number" ng-model="article.reference" class="form-control bfh-number" placeholder="ID MENU" min=0>
+                        <input type="text" ng-model="income.pesanan" class="form-control" placeholder="NAMA" value="{{ income.pesanan }}">
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" class="form-control" placeholder="NAMA">
+                        <input type="number" ng-model="income.quantity" class="form-control bfh-number" min=0 value="{{ income.quantity }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.quantite" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="income.diskon" class="form-control bfh-number" min=0 value="{{ income.diskon }}">
                       </td>
                       <td>
-                        <input type="number" ng-model="article.montantHT" class="form-control bfh-number" min=0>
-                      </td>
-                      <td>
-                        <input type="number" ng-model="article.montantTTC" class="form-control bfh-number" min=0>
+                        <input type="number" ng-model="income.hargaAkhir" class="form-control bfh-number" min=0 value="{{ income.hargaAkhir }}">
                       </td>
                       <!-- <td>
                         <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
                       </td> -->
                     </tr>
                     <tr class="success">
-                      <th class="success"></th>
+                      <!-- <th class="success"></th> -->
                       <td class="success"></td>
                       <td class="success"></td>
-                      <td class="success">{{ NombreArticle() }} Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">{{ PrixTotalTTC() | number:2 }} Rp.</td>
-                      <td class="success"></td>
+                      <td class="success text-right">
+                          Total Pendapatan <span>{{ getMonth() }}</span>
+                      </td>
+                      <td>
+                        <span class="success text-right" ng-model="income.pendapatan" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">Rp. {{ totalPendapatan() | number:2 }}</span>
+                      </td>
                     </tr>
+                  </tbody>
+                </table>
+                <table class="table table-striped table-hover table-responsive">
+                  <thead>
+                    <tr>
+                      <th colspan="5" style="font-size:25px">
+                        <p class="text-left">
+                          Pengeluaran Bulan <span ng-model="getmonthspan" class="">{{ getMonth() }}</span>
+                        </p>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Bulan</th>
+                      <th>Tahun</th>
+                      <th>Deskripsi</th>
+                      <th>Pengeluaran</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="exp in exps">
+                      <td>
+                        <input type="text" ng-model="exp.bulan" class="form-control bfh-number" placeholder="MM" min=0 value="{{ exp.bulan }}">
+                      </td>
+                      <td>
+                        <input type="text" ng-model="exp.tahun" class="form-control" placeholder="YYYY" value="{{ exp.tahun }}">
+                      </td>
+                      <td>
+                        <input type="number" ng-model="exp.namaPengeluaran" class="form-control bfh-number" min=0 value="{{ exp.namaPengeluaran }}">
+                      </td>
+                      <td>
+                        <input type="number" ng-model="exp.jumlah" class="form-control bfh-number" min=0 value="{{ exp.jumlah }}">
+                      </td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success text-left">
+                        Total Pengeluaran Bulan <span>{{ getMonth() }}</span>
+                      </td>
+                      <td>
+                        <span class="success text-right" ng-model="exp.pengeluaran" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">Rp. {{ totalPengeluaran() | number:2 }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table class="table table-striped table-hover table-responsive" style="margin-top:30px">
+                  <thead>
+                    <tr>
+                      <th colspan="5" style="font-size:25px">
+                        <p class="text-left">
+                          Laba Bulan <span ng-model="getmonthspan">{{ getMonth() }}</span>
+                        </p>
+                      </th>
+                      <th class="success text-right" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">
+                        Rp. {{ (totalPendapatan()-totalPengeluaran())-(getTax()*(totalPendapatan()-totalPengeluaran())) | number:2 }}
+                      </th>
+                    </tr>
+                    <!-- <tr>
+                      <th>Bulan</th>
+                      <th>Tahun</th>
+                      <th>Deskripsi</th>
+                      <th>Pengeluaran</th>
+                    </tr> -->
+                  </thead>
+                  <tbody>
+                    <!-- <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success text-right">Laba Bulan <span>{{ getMonth() }}</span></td>
+                    </tr> -->
                   </tbody>
                 </table>
                 <!-- <a href ng:click="AjouterArticle()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a> -->
