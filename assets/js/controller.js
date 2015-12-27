@@ -8,7 +8,9 @@ appControllers.controller('MenuController',['$scope','$http',
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
   				// $('#username').text(data.message.nama);
-            $('#username').html(data.message[0].nama);
+          temp = data.message[0].nama;
+          $('#username').html(data.message[0].nama);
+            // usernameonline = data.message[0].nama;
             // alert(data.message[0].nama);
   		});
 
@@ -78,7 +80,7 @@ appControllers.controller('MenuController',['$scope','$http',
          success: function(response){
            obj = JSON.parse(response);
           //  alert(obj.message);
-          swal({   title: "Sweet!",   text: "successfully updated"});
+          // swal({   title: "Sweet!",   text: "successfully updated"});
           //  document.location.reload();
          },
          error: function(xhr, status, error){
@@ -89,6 +91,113 @@ appControllers.controller('MenuController',['$scope','$http',
          //  document.location.reload();
         }
       });
+
+      //insertHistory
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+        $.ajax({
+          url: domain + ':3000/api/insertHistory',
+          dataType: 'text',
+          method: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          data: {
+            namaUser:data.message[0].nama,
+            perubahan:'menu',
+            row:index+1,
+            status:'update',
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+          },
+          success: function(response){
+            obj = JSON.parse(response);
+           //  alert(obj.message);
+           swal({   title: "Sweet!",   text: "successfully updated"});
+           //  document.location.reload();
+          },
+          error: function(xhr, status, error){
+            alert(error);
+          },
+          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+           //do smth if you need
+          //  document.location.reload();
+         }
+       });
+  		});
+     }
+
+     $scope.decreaseStockNew = function () {
+       var composition = $scope.menu[idx].komposisi;
+       var res = composition.split(",");
+       var quantity = $scope.menu[idx].kuantitas;
+
+       for (var i = 0; i < res.length; i++) {
+         var stock = res[i].split(" ");
+         var namaStock = stock[0];
+         var jumlahStock = stock[1];
+         var total = jumlahStock*quantity;
+          $.ajax({
+            url: domain + ':3000/api/kurangStok',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              nama:namaStock,
+              jumPengurangan:total,
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+              // alert(obj.message);
+              if (obj.message === "error") {
+                swal({
+                     title: "Insufficient Stock!?",
+                     text: "Sisa stok tidak mencukupi",
+                     type: "warning",
+                     showCancelButton: true,
+                     confirmButtonColor: "#DD6B55",
+                     confirmButtonText: "Try Again!",
+                     closeOnConfirm: false
+                   },
+                     function(){
+                       swal("Okay!", "You got another chance.", "success");
+                 });
+              }
+              else {
+                swal({   title: "Berhasil mengurangi stok",   text: obj.message});
+              }
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+
+         $.ajax({
+           url: domain + ':3000/api/reorderStok',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             nama:namaStock,
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response);
+             //  alert(obj.message);
+            swal({   title: "Saatnya Order?",   text: obj.message});
+            //  document.location.reload();
+           },
+           error: function(xhr, status, error){
+             alert(error);
+           },
+           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+            //do smth if you need
+           //  document.location.reload();
+          }
+        });
+      }
      }
 
      $scope.decreaseStock = function (index) {
@@ -114,6 +223,23 @@ appControllers.controller('MenuController',['$scope','$http',
             success: function(response){
               obj = JSON.parse(response);
               // alert(obj.message);
+              if (obj.message === "error") {
+                swal({
+                     title: "Insufficient Stock!?",
+                     text: "Sisa stok tidak mencukupi",
+                     type: "warning",
+                     showCancelButton: true,
+                     confirmButtonColor: "#DD6B55",
+                     confirmButtonText: "Try Again!",
+                     closeOnConfirm: false
+                   },
+                     function(){
+                       swal("Okay!", "You got another chance.", "success");
+                 });
+              }
+              else {
+                swal({   title: "Berhasil mengurangi stok",   text: obj.message});
+              }
              // swal({   title: "Sweet!",   text: "successfully updated"});
              //  document.location.reload();
             },
@@ -150,10 +276,6 @@ appControllers.controller('MenuController',['$scope','$http',
           }
         });
       }
-
-
-
-
      }
 
      $scope.save = function () {
@@ -197,6 +319,36 @@ appControllers.controller('MenuController',['$scope','$http',
           //  document.location.reload();
          }
        });
+
+       //insertHistory
+       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+         $.ajax({
+           url: domain + ':3000/api/insertHistory',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             namaUser:data.message[0].nama,
+             perubahan:'menu',
+             row:idx+1,
+             status:'insert',
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response);
+            //  alert(obj.message);
+            swal({   title: "Sweet!",   text: "successfully updated"});
+            //  document.location.reload();
+           },
+           error: function(xhr, status, error){
+             alert(error);
+           },
+           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+            //do smth if you need
+           //  document.location.reload();
+          }
+        });
+   		});
      }
 
      $scope.delete = function(index) {
@@ -241,7 +393,38 @@ appControllers.controller('MenuController',['$scope','$http',
          //  document.location.reload();
         }
       });
-     };
+
+        //insertHistory
+        $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          $.ajax({
+            url: domain + ':3000/api/insertHistory',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              namaUser:data.message[0].nama,
+              perubahan:'menu',
+              row:index+1,
+              status:'delete',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+             //  alert(obj.message);
+             swal({   title: "Sweet!",   text: "successfully updated"});
+             document.location.reload();
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+       });
+     }
 
      $.ajax({
        url: domain + ':3000/api/showMenu',
@@ -813,6 +996,36 @@ appControllers.controller('ExpensesController',['$scope','$http',
              //  document.location.reload();
             }
           });
+          //insertHistory
+          $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+            $.ajax({
+              url: domain + ':3000/api/insertHistory',
+              dataType: 'text',
+              method: 'POST',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              data: {
+                namaUser:data.message[0].nama,
+                perubahan:'expenses',
+                row:i,
+                status:'insert'+" "+namaexp,
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+              },
+              success: function(response){
+                obj = JSON.parse(response);
+               //  alert(obj.message);
+               swal({   title: "Sweet!",   text: "successfully updated"});
+               document.location.reload();
+               //  document.location.reload();
+              },
+              error: function(xhr, status, error){
+                alert(error);
+              },
+              complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+               //do smth if you need
+              //  document.location.reload();
+             }
+           });
+         });
         }
       }
 
@@ -1166,6 +1379,7 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
           },
           success: function(response){
             // alert(response.message);
+            swal({   title: "Deleted!",   text: "successfully updated"});
             idx--;
             document.location.reload();
           },
@@ -1177,7 +1391,38 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
           //  document.location.reload();
          }
        });
-      };
+
+         //insertHistory
+         $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+           $.ajax({
+             url: domain + ':3000/api/insertHistory',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               namaUser:data.message[0].nama,
+               perubahan:'employee',
+               row:index+1,
+               status:'delete',
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response);
+              //  alert(obj.message);
+              swal({   title: "Sweet!",   text: "successfully updated"});
+              document.location.reload();
+              //  document.location.reload();
+             },
+             error: function(xhr, status, error){
+               alert(error);
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        });
+      }
 
       $scope.update = function (index) {
         var id = $scope.employees[index].nik;
@@ -1204,7 +1449,7 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "Berhasil Update") {
-              swal({   title: "Sweet!",   text: "successfully updated"});
+            swal({   title: "Sweet!",   text: "successfully updated"});
               // document.location.reload();
             }
             else {
@@ -1219,6 +1464,37 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
           //  document.location.reload();
          }
        });
+
+       //insertHistory
+       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+         $.ajax({
+           url: domain + ':3000/api/insertHistory',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             namaUser:data.message[0].nama,
+             perubahan:'employee',
+             row:index+1,
+             status:'update',
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response);
+            //  alert(obj.message);
+            swal({   title: "Sweet!",   text: "successfully updated"});
+            document.location.reload();
+            //  document.location.reload();
+           },
+           error: function(xhr, status, error){
+             alert(error);
+           },
+           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+            //do smth if you need
+           //  document.location.reload();
+          }
+        });
+      });
       }
 
       $scope.save = function () {
@@ -1246,7 +1522,8 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
            success: function(response){
              obj = JSON.parse(response);
              if (obj.message === "input pegawai berhasil") {
-               alert(obj.message);
+              //  alert(obj.message);
+               swal({   title: "Sweet!",   text: "successfully inserted"});
                $('.plusbtn').removeClass('hidden');
                document.location.reload();
              }
@@ -1262,6 +1539,36 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
            //  document.location.reload();
           }
         });
+        //insertHistory
+        $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          $.ajax({
+            url: domain + ':3000/api/insertHistory',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              namaUser:data.message[0].nama,
+              perubahan:'employee',
+              row:idx+1,
+              status:'insert',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+             //  alert(obj.message);
+             swal({   title: "Sweet!",   text: "successfully updated"});
+             document.location.reload();
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+       });
       }
 
       changeTitleHeader('RADICAL Employees Data');
@@ -1336,6 +1643,7 @@ appControllers.controller('SupplierDataController',['$scope','$http',
            },
            success: function(response){
             //  alert(response.message);
+            swal({   title: "Deleted!",   text: "successfully deleted"});
              idx--;
              document.location.reload();
            },
@@ -1347,7 +1655,37 @@ appControllers.controller('SupplierDataController',['$scope','$http',
            //  document.location.reload();
           }
         });
-       };
+          //insertHistory
+          $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+            $.ajax({
+              url: domain + ':3000/api/insertHistory',
+              dataType: 'text',
+              method: 'POST',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              data: {
+                namaUser:data.message[0].nama,
+                perubahan:'supplier',
+                row:index+1,
+                status:'delete',
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+              },
+              success: function(response){
+                obj = JSON.parse(response);
+               //  alert(obj.message);
+               swal({   title: "Sweet!",   text: "successfully updated"});
+               document.location.reload();
+               //  document.location.reload();
+              },
+              error: function(xhr, status, error){
+                alert(error);
+              },
+              complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+               //do smth if you need
+              //  document.location.reload();
+             }
+           });
+         });
+       }
 
        $scope.update = function (index) {
          var id = $scope.suppliers[index].nis;
@@ -1385,6 +1723,36 @@ appControllers.controller('SupplierDataController',['$scope','$http',
            //  document.location.reload();
           }
         });
+          //insertHistory
+          $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+            $.ajax({
+              url: domain + ':3000/api/insertHistory',
+              dataType: 'text',
+              method: 'POST',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              data: {
+                namaUser:data.message[0].nama,
+                perubahan:'supplier',
+                row:index+1,
+                status:'update',
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+              },
+              success: function(response){
+                obj = JSON.parse(response);
+               //  alert(obj.message);
+               swal({   title: "Sweet!",   text: "successfully updated"});
+               document.location.reload();
+               //  document.location.reload();
+              },
+              error: function(xhr, status, error){
+                alert(error);
+              },
+              complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+               //do smth if you need
+              //  document.location.reload();
+             }
+           });
+         });
        }
 
        $scope.save = function () {
@@ -1408,10 +1776,10 @@ appControllers.controller('SupplierDataController',['$scope','$http',
             success: function(response){
               obj = JSON.parse(response);
               if (obj.message === "input supplier berhasil") {
-                alert(obj.message);
-                $('.plusbtn').removeClass('.hidden');
+                // alert(obj.message);
                 swal("Good job!", obj.message, "success");
-                // document.location.reload();
+                $('.plusbtn').removeClass('.hidden');
+                document.location.reload();
               }
               else {
                 alert("input tidak boleh kosong");
@@ -1425,6 +1793,36 @@ appControllers.controller('SupplierDataController',['$scope','$http',
             //  document.location.reload();
            }
          });
+         //insertHistory
+         $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+           $.ajax({
+             url: domain + ':3000/api/insertHistory',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               namaUser:data.message[0].nama,
+               perubahan:'supplier',
+               row:idx+1,
+               status:'insert',
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response);
+              //  alert(obj.message);
+              swal({   title: "Sweet!",   text: "successfully updated"});
+              document.location.reload();
+              //  document.location.reload();
+             },
+             error: function(xhr, status, error){
+               alert(error);
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        });
        }
 
       changeTitleHeader('RADICAL Supplier Data');
@@ -1508,6 +1906,36 @@ appControllers.controller('MemberDataController',['$scope','$http',
          //  document.location.reload();
         }
       });
+        //insertHistory
+        $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          $.ajax({
+            url: domain + ':3000/api/insertHistory',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              namaUser:data.message[0].nama,
+              perubahan:'member',
+              row:index+1,
+              status:'delete',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+             //  alert(obj.message);
+             swal({   title: "Sweet!",   text: "successfully updated"});
+             document.location.reload();
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+       });
      };
 
      $scope.update = function (index) {
@@ -1551,6 +1979,36 @@ appControllers.controller('MemberDataController',['$scope','$http',
          //  document.location.reload();
         }
       });
+        //insertHistory
+        $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          $.ajax({
+            url: domain + ':3000/api/insertHistory',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              namaUser:data.message[0].nama,
+              perubahan:'member',
+              row:index+1,
+              status:'update',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+             //  alert(obj.message);
+             swal({   title: "Sweet!",   text: "successfully updated"});
+             document.location.reload();
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+       });
      }
 
      $scope.save = function () {
@@ -1594,6 +2052,36 @@ appControllers.controller('MemberDataController',['$scope','$http',
           //  document.location.reload();
          }
        });
+       //insertHistory
+       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+         $.ajax({
+           url: domain + ':3000/api/insertHistory',
+           dataType: 'text',
+           method: 'POST',
+           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           data: {
+             namaUser:data.message[0].nama,
+             perubahan:'member',
+             row:idx+1,
+             status:'insert',
+             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+           },
+           success: function(response){
+             obj = JSON.parse(response);
+            //  alert(obj.message);
+            swal({   title: "Sweet!",   text: "successfully updated"});
+            document.location.reload();
+            //  document.location.reload();
+           },
+           error: function(xhr, status, error){
+             alert(error);
+           },
+           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+            //do smth if you need
+           //  document.location.reload();
+          }
+        });
+      });
      }
     changeTitleHeader('RADICAL Data Member');
     }
@@ -1647,6 +2135,9 @@ appControllers.controller('SettingController',['$scope','$http',
       }
 
       $scope.showHistory = function () {
+        $('thead').removeClass('hidden');
+        $('tbody').removeClass('hidden');
+
         $.ajax({
           url: domain + ':3000/api/showHistory',
           dataType: 'json',
@@ -1738,7 +2229,8 @@ appControllers.controller('StockDetailController',['$scope','$http',
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
-            alert(response.message);
+            // alert(response.message);
+            swal({   title: "Sweet!",   text: response.message});
             idx--;
             document.location.reload();
           },
@@ -1750,7 +2242,38 @@ appControllers.controller('StockDetailController',['$scope','$http',
           //  document.location.reload();
          }
        });
-      };
+
+         //insertHistory
+         $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+           $.ajax({
+             url: domain + ':3000/api/insertHistory',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               namaUser:data.message[0].nama,
+               perubahan:'stock',
+               row:index+1,
+               status:'delete',
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response);
+              //  alert(obj.message);
+              swal({   title: "Sweet!",   text: "successfully updated"});
+              document.location.reload();
+              //  document.location.reload();
+             },
+             error: function(xhr, status, error){
+               alert(error);
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        });
+      }
 
       $scope.update = function (index) {
         var id = $scope.stocks[index].id;
@@ -1790,6 +2313,37 @@ appControllers.controller('StockDetailController',['$scope','$http',
           //  document.location.reload();
          }
        });
+
+         //insertHistory
+         $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+           $.ajax({
+             url: domain + ':3000/api/insertHistory',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               namaUser:data.message[0].nama,
+               perubahan:'stock',
+               row:index+1,
+               status:'update',
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response);
+              //  alert(obj.message);
+              swal({   title: "Sweet!",   text: "successfully updated"});
+              document.location.reload();
+              //  document.location.reload();
+             },
+             error: function(xhr, status, error){
+               alert(error);
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        });
       }
 
       $scope.save = function () {
@@ -1813,7 +2367,8 @@ appControllers.controller('StockDetailController',['$scope','$http',
            success: function(response){
              obj = JSON.parse(response);
              if (obj.message === ("input stock berhasil dengan id "+id)) {
-               alert(obj.message);
+              //  alert(obj.message);
+               swal({   title: "Sweet!",   text: obj.message});
                $('.plusbtn').removeClass('.hidden');
                document.location.reload();
              }
@@ -1829,6 +2384,37 @@ appControllers.controller('StockDetailController',['$scope','$http',
            //  document.location.reload();
           }
         });
+
+        //insertHistory
+        $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          $.ajax({
+            url: domain + ':3000/api/insertHistory',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              namaUser:data.message[0].nama,
+              perubahan:'stock',
+              row:idx+1,
+              status:'insert',
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+             //  alert(obj.message);
+             swal({   title: "Sweet!",   text: "successfully updated"});
+             document.location.reload();
+             //  document.location.reload();
+            },
+            error: function(xhr, status, error){
+              alert(error);
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+       });
       }
 
       changeTitleHeader('RADICAL Stock Detail');
