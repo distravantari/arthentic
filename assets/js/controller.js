@@ -527,7 +527,10 @@ appControllers.controller('InvoiceController',['$scope','$http','$window',
   		});
 
       $scope.deleteInvoice = function () {
-        $scope.invoice = [{}];
+        $http.get('http://localhost:3000/api/deleteInvoices?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
+            swal("Good job!", data.message, "success");
+    				$scope.loading = false;
+    		});
       }
 
       $scope.printInvoice = function () {
@@ -538,6 +541,10 @@ appControllers.controller('InvoiceController',['$scope','$http','$window',
        $window.print();
        printButton.style.visibility = 'visible';
        deleteButton.style.visibility = 'visible';
+       $http.get('http://localhost:3000/api/deleteInvoices?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
+           swal("Good job!", data.message, "success");
+           $scope.loading = false;
+       });
       }
 
       $scope.SubTotal = function () {
