@@ -7,11 +7,43 @@ appControllers.controller('MenuController',['$scope','$http',
     function($scope,$http){
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
-          temp = data.message[0].nama;
+  				//change hi, username
           $('#username').html(data.message[0].nama);
-            // usernameonline = data.message[0].nama;
-            // alert(data.message[0].nama);
+          var nama = data.message[0].nama;
+          //getPermissionByName
+          $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+            var str = data.message[0].permission;
+            if (str.length <= 7) {
+              var ct = 7-str.length;
+              for (var i = 0; i < ct; i++) {
+                str += "0";
+              }
+            }
+            else {
+              str = str.substring(0, 7);
+            }
+            if (str.charAt(0)=="1") {
+              $('#showReports').removeClass('hidden');
+            }
+            if (str.charAt(1)=="1") {
+              $('#showMenu').removeClass('hidden');
+            }
+            if (str.charAt(2)=="1") {
+              $('#showOrder').removeClass('hidden');
+            }
+            if (str.charAt(3)=="1") {
+              $('#showStockDetail').removeClass('hidden');
+            }
+            if (str.charAt(4)=="1") {
+              $('#showData').removeClass('hidden');
+            }
+            if (str.charAt(5)=="1") {
+              $('#showExpenses').removeClass('hidden');
+            }
+            if (str.charAt(6)=="1") {
+              $('#showSetting').removeClass('hidden');
+            }
+      		});
   		});
 
       $('.bars').removeClass('hidden');
@@ -121,86 +153,6 @@ appControllers.controller('MenuController',['$scope','$http',
          }
        });
   		});
-     }
-
-     $scope.decreaseStockNew = function () {}
-
-     $scope.decreaseStock = function (index) {
-       var composition = $scope.menu[index].komposisi;
-       var res = composition.split(",");
-       var quantity = $scope.menu[index].kuantitas;
-
-       for (var i = 0; i < res.length; i++) {
-         var stock = res[i].split(" ");
-         var namaStock = stock[0];
-         var jumlahStock = stock[1];
-         var total = jumlahStock*quantity;
-          $.ajax({
-            url: domain + ':3000/api/kurangStok',
-            dataType: 'text',
-            method: 'POST',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: {
-              nama:namaStock,
-              jumPengurangan:total,
-              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-            },
-            success: function(response){
-              obj = JSON.parse(response);
-              // alert(obj.message);
-              if (obj.message === "error") {
-                swal({
-                     title: "Insufficient Stock!?",
-                     text: "Sisa stok tidak mencukupi",
-                     type: "warning",
-                     showCancelButton: true,
-                     confirmButtonColor: "#DD6B55",
-                     confirmButtonText: "Try Again!",
-                     closeOnConfirm: false
-                   },
-                     function(){
-                       swal("Okay!", "You got another chance.", "success");
-                 });
-              }
-              else {
-                swal({   title: "Berhasil mengurangi stok",   text: obj.message});
-              }
-             // swal({   title: "Sweet!",   text: "successfully updated"});
-             //  document.location.reload();
-            },
-            error: function(xhr, status, error){
-              alert(error);
-            },
-            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-             //do smth if you need
-            //  document.location.reload();
-           }
-         });
-
-         $.ajax({
-           url: domain + ':3000/api/reorderStok',
-           dataType: 'text',
-           method: 'POST',
-           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-           data: {
-             nama:namaStock,
-             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-           },
-           success: function(response){
-             obj = JSON.parse(response);
-             //  alert(obj.message);
-            swal({   title: "Saatnya Order?",   text: obj.message});
-            //  document.location.reload();
-           },
-           error: function(xhr, status, error){
-             alert(error);
-           },
-           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-            //do smth if you need
-           //  document.location.reload();
-          }
-        });
-      }
      }
 
      $scope.save = function () {
@@ -566,9 +518,43 @@ appControllers.controller('DashboardController',['$scope','$http',
       $('.bars').removeClass('hidden');
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
-            $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+          //change hi, username
+          $('#username').html(data.message[0].nama);
+          var nama = data.message[0].nama;
+          //getPermissionByName
+          $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+            var str = data.message[0].permission;
+            if (str.length <= 7) {
+              var ct = 7-str.length;
+              for (var i = 0; i < ct; i++) {
+                str += "0";
+              }
+            }
+            else {
+              str = str.substring(0, 7);
+            }
+            if (str.charAt(0)=="1") {
+              $('#showReports').removeClass('hidden');
+            }
+            if (str.charAt(1)=="1") {
+              $('#showMenu').removeClass('hidden');
+            }
+            if (str.charAt(2)=="1") {
+              $('#showOrder').removeClass('hidden');
+            }
+            if (str.charAt(3)=="1") {
+              $('#showStockDetail').removeClass('hidden');
+            }
+            if (str.charAt(4)=="1") {
+              $('#showData').removeClass('hidden');
+            }
+            if (str.charAt(5)=="1") {
+              $('#showExpenses').removeClass('hidden');
+            }
+            if (str.charAt(6)=="1") {
+              $('#showSetting').removeClass('hidden');
+            }
+      		});
   		});
 
       $http.get('http://localhost:3000/api/menuTotal?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
@@ -612,9 +598,43 @@ appControllers.controller('DailyReportsController',['$scope','$http',
       $scope.dailys = [{}];
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $scope.total = function (idx) {
@@ -679,9 +699,43 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
       $scope.weekly = [{}];
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $scope.total = function (idx) {
@@ -752,9 +806,43 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
       $scope.exps = [{}];
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
-            $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+  				//change hi, username
+          $('#username').html(data.message[0].nama);
+          var nama = data.message[0].nama;
+          //getPermissionByName
+          $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+            var str = data.message[0].permission;
+            if (str.length <= 7) {
+              var ct = 7-str.length;
+              for (var i = 0; i < ct; i++) {
+                str += "0";
+              }
+            }
+            else {
+              str = str.substring(0, 7);
+            }
+            if (str.charAt(0)=="1") {
+              $('#showReports').removeClass('hidden');
+            }
+            if (str.charAt(1)=="1") {
+              $('#showMenu').removeClass('hidden');
+            }
+            if (str.charAt(2)=="1") {
+              $('#showOrder').removeClass('hidden');
+            }
+            if (str.charAt(3)=="1") {
+              $('#showStockDetail').removeClass('hidden');
+            }
+            if (str.charAt(4)=="1") {
+              $('#showData').removeClass('hidden');
+            }
+            if (str.charAt(5)=="1") {
+              $('#showExpenses').removeClass('hidden');
+            }
+            if (str.charAt(6)=="1") {
+              $('#showSetting').removeClass('hidden');
+            }
+      		});
   		});
 
       $scope.getMonth = function () {
@@ -882,9 +970,43 @@ appControllers.controller('ExpensesController',['$scope','$http',
       $('.bars').removeClass('hidden');
       $scope.expenses = [{}];
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
       var i=0;
       $scope.tambah = function() {
@@ -983,9 +1105,43 @@ appControllers.controller('ExpensesReportsController',['$scope','$http',
       $('.bars').removeClass('hidden');
       $scope.expensesReports = [{}];
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $scope.getMonth = function () {
@@ -1053,9 +1209,43 @@ appControllers.controller('OrderController',['$scope','$http',
       $('.bars').removeClass('hidden');
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi,username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $scope.articles = [{}];
@@ -1356,9 +1546,43 @@ appControllers.controller('EmployeesDataController',['$scope','$http',
       $('.bars').removeClass('hidden');
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $scope.employees = [{}];
@@ -1617,9 +1841,43 @@ appControllers.controller('SupplierDataController',['$scope','$http',
       var idx = 0;
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				// change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $.ajax({
@@ -1871,9 +2129,43 @@ appControllers.controller('MemberDataController',['$scope','$http',
       var idx = 0;
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				//change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $.ajax({
@@ -2130,9 +2422,43 @@ appControllers.controller('SettingController',['$scope','$http',
       $scope.settings = [{}];
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				// change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $.get('http://localhost:3000/api/showSetting?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
@@ -2210,9 +2536,43 @@ appControllers.controller('StockDetailController',['$scope','$http',
       var idx = 0;
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
-  				// $('#username').text(data.message.nama);
+    				// change hi, username
             $('#username').html(data.message[0].nama);
-            // alert(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
   		});
 
       $.ajax({
