@@ -1,97 +1,81 @@
-<div class='content' style="margin-bottom:100px;">
-    <div class="container-fluid">
-        <div class="row" style="padding-top:50px;padding-left:200px">
-            <div class="col-sm-9">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h1 class="page_heading">
-                            Arthentic Coffe
-                        </h1>
-                        <p class="text-center">
-                          Jl. Pandu Raya no.107, Bogor Utara
-                        </p>
-                        <p class="text-center">
-                          Tel : (021)-xxxxx
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-10">
-                  </div>
-                  <div class="col-sm-2">
-                    <span>October 6 2014</span>
-                  </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table class="table table-yuk2 table-invoices">
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th class="cw text-center">Quantity</th>
-                                    <th class="cw text-center">Discount</th>
-                                    <th class="cw text-center">Amount (RP)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="inv in invoice">
-                                    <td class="text-center">
-                                      <span ng-model="inv.name">{{ inv.name }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                      <span ng-model="inv.hargaSatuan">{{ inv.hargaSatuan }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                      <span ng-model="inv.kuantitas">{{ inv.kuantitas }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                      <span ng-model="inv.dicount">{{ inv.discount }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                      <span ng-model="inv.totalSatuan">{{ inv.totalSatuan }}</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" class="text-right text-muted">Subtotal</td>
-                                    <td class="text-right" colspan="2">Rp. {{ SubTotal() | number:2 }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="text-right text-muted">Tax</td>
-                                    <td class="text-right" colspan="2">Rp. {{ 0.1*SubTotal() | number:2 }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="text-right text-muted">Services</td>
-                                    <td class="text-right" colspan="2">Rp. {{ 0.05*SubTotal() | number:2 }}</td>
-                                </tr>
-                                <tr class="grand_total">
-                                    <td colspan="3" class="text-right text-muted">Grand Total</td>
-                                    <td class="text-right text-success" colspan="2">Rp. {{ 1.15*SubTotal() | number:2 }}</td>
-                                </tr>
-                                <tr>
-                                  <td colspan="3" class="text-right text-muted">Paid</td>
-                                  <td class="text-right text-success" colspan="2">
-                                    <input type="number" ng-model="inv.total" id="total"  class="text-right total form-control bfh-number" placeholder="0"/>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td colspan="3" class="text-right text-muted">Change Due</td>
-                                  <td class="text-right text-success" colspan="2">
-                                    <span>Rp. {{ (inv.total - (1.15*SubTotal())) | number:2 }}</span>
-                                  </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <div class="col-sm-12 text-right">
-                            <a class="btn btn-sm btn-default btn-outline" href="#">PRINT</a>
-                            <a class="btn btn-sm btn-danger btn-outline" href="#">DELETE</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-  </div>
+<div class="col-xs-12">
+  <table border="0">
+    <thead>
+      <tr>
+        <th colspan="2"><img src="assets/img/coffee_logo.png" width="50px" height="50px" alt="" /></th>
+      </tr>
+      <tr>
+        <th colspan="2">Arthentic Coffe Shop</th>
+      </tr>
+      <tr>
+        <th colspan="2">Jl. Pandu Raya no.107,  Bogor Utara</th>
+      </tr>
+      <tr>
+        <th colspan="2">Tel : (021)-1234567</th>
+      </tr>
+      <tr>
+        <th colspan="2">Email : arthentic@coffe.com</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="2"><hr style="border-top: dotted 1px;" /></td>
+      </tr>
+      <tr ng-repeat="inv in invoice">
+          <td class="text-left">
+            <span ng-model="inv.name">{{ inv.name }}</span>
+            <br>
+            <span ng-model="inv.kuantitas">{{ inv.kuantitas }}</span> x
+            <br>
+          </td>
+          <td class="text-right">
+            <span ng-model="inv.hargaSatuan">{{ inv.hargaSatuan*inv.kuantitas | number:2 }}</span>
+            <br>
+            - <span ng-model="inv.dicount">{{ (inv.discount/100)*(inv.hargaSatuan*inv.kuantitas) | number :2 }}</span>
+            <br>
+            <!-- <span ng-model="inv.totalSatuan">{{ inv.totalSatuan | number:2 }}</span> -->
+          </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"><hr style="border-top: dotted 1px;"></td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">Subtotal</td>
+        <td class="text-right">Rp. {{ SubTotal() | number:2 }}</td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">Tax</td>
+        <td class="text-right">Rp. {{ 0.1*SubTotal() | number:2 }}</td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">Services</td>
+        <td class="text-right">Rp. {{ 0.05*SubTotal() | number:2 }}</td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">GrandTotal</td>
+        <td class="text-right text-success">Rp. {{ 1.15*SubTotal() | number:2 }}</td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">Paid</td>
+        <td class="text-right text-success">
+          <input type="number" ng-model="inv.total" id="total" width="10px" class="text-right total form-control bfh-number" placeholder="0"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right text-muted">ChangeDue</td>
+        <td class="text-right text-success">
+          <span>Rp. {{ (inv.total - (1.15*SubTotal())) | number:2 }}</span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><hr style="border-top: dotted 1px;"></td>
+      </tr>
+      <tr>
+        <td class="text-right"><a class="btn btn-xs btn-danger btn-outline" id="deleteButton" ng-click="deleteInvoice()">DELETE</a></td>
+        <td class="text-right"><a class="btn btn-xs btn-default btn-outline" id="printButton" ng-click="printInvoice()">PRINT</a></td>
+      </tr>
+    </tfoot>
+  </table>
 </div>

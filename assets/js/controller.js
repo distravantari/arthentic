@@ -509,8 +509,8 @@ appControllers.controller('RegisterController',['$scope','$http',
     }
 ]);
 
-appControllers.controller('InvoiceController',['$scope','$http',
-    function($scope,$http){
+appControllers.controller('InvoiceController',['$scope','$http','$window',
+    function($scope,$http,$window){
       $('.bars').removeClass('hidden');
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
@@ -522,10 +522,23 @@ appControllers.controller('InvoiceController',['$scope','$http',
       $scope.invoice = [{}];
 
       $http.get('http://localhost:3000/api/invoices?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ').success(function(data){
-
           $scope.invoice = data.message;
   				$scope.loading = false;
   		});
+
+      $scope.deleteInvoice = function () {
+        $scope.invoice = [{}];
+      }
+
+      $scope.printInvoice = function () {
+       var printButton = document.getElementById("printButton");
+       var deleteButton = document.getElementById("deleteButton");
+       printButton.style.visibility = 'hidden';
+       deleteButton.style.visibility = 'hidden';
+       $window.print();
+       printButton.style.visibility = 'visible';
+       deleteButton.style.visibility = 'visible';
+      }
 
       $scope.SubTotal = function () {
         var resultHT =0;
