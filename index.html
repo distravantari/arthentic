@@ -17,7 +17,6 @@
 	<body>
 		<div class="offcanvas-layer">
 		</div>
-	</div>
 
     <!-- MENU LEFT BAR -->
 		<nav id="left-menu" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
@@ -73,7 +72,6 @@
 		</script>
 
 		<div class="wrapper-offcanvas">
-
 			<div class="navbar navbar-default navbar-fixed-top">
         <div class="col-md-9">
 						<button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#left-menu" data-canvas="body">
@@ -86,12 +84,61 @@
 				</div>
 				<div class="col-md-2">
 					<button type="button" class="navbar-toggle" onclick="logout()" data-canvas="body">
-					<span class="fa fa-sign-out fa-1x hidden bars"></span>
+						<span class="fa fa-sign-out fa-1x hidden bars"></span>
 					</button>
 					<button type="button" class="navbar-toggle" onclick="window.location.href='#/setting'" data-canvas="body">
-					<span class="fa fa-asterisk fa-1x hidden" id="showSetting"></span>
+						<span class="fa fa-asterisk fa-1x hidden" id="showSetting"></span>
+					</button>
+					<button type="button" class="navbar-toggle" onclick="closeApp()" data-canvas="body">
+						<span class="fa fa-times fa-1x"></span>
 					</button>
 					<script type="text/javascript">
+						function closeApp() {
+						swal({
+							title: "Exit ?",
+							text: "you want to exit from this awesome apps?",
+							type: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Yes, please!",
+							cancelButtonText: "No, please this is too awesome!",
+							closeOnConfirm: false,
+							closeOnCancel: false },
+							function(isConfirm){
+								if (isConfirm) {
+									swal("exit!", "bye bye.", "success");
+									// document.location.assign('http://localhost:8080/arthentic/#/login');
+									document.close();
+								}
+								else {
+									swal("Cancelled", "stay awesome", "error");
+								}
+							});
+							var user = $('#username').text();
+							$.ajax({
+			          url: domain + ':3000/api/updateStatus',
+			          dataType: 'text',
+			          method: 'POST',
+			          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			          data: {
+			            nama: user,
+			            status: "offline",
+			            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+			          },
+			          success: function(response){
+			            obj = JSON.parse(response);
+			          },
+			          error: function(xhr, status, error){
+			            alert(error);
+			            // document.location.reload();
+			          },
+			          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+			           //do smth if you need
+			          //  document.location.reload();
+			         }
+			       });
+						}
+
 						function logout(){
 						swal({
 							title: "LOGOUT ?",

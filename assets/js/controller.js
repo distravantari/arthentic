@@ -1283,9 +1283,14 @@ appControllers.controller('OrderController',['$scope','$http',
           },
           success: function(response){
             // alert(response.message[0].nama);
-            var harga = Number(response.message[0].harga)
-            $scope.articles[idx].price = harga;
-            $scope.articles[idx].titre = response.message[0].nama;
+            if (response.message[0].nama == 'menu habis/tidak ada') {
+              $scope.articles[idx].titre = response.message[0].nama;
+            }else{
+              var harga = Number(response.message[0].harga)
+              $scope.articles[idx].price = harga;
+              $scope.articles[idx].titre = response.message[0].nama;
+            }
+
           },
           error: function(xhr, status, error){
             // alert(error);
@@ -1369,59 +1374,10 @@ appControllers.controller('OrderController',['$scope','$http',
           var discount = $scope.articles[i].discount;
           var total = $scope.articles[i].total;
 
-          $.ajax({
-            url: domain + ':3000/api/insertOrder',
-            dataType: 'text',
-            method: 'POST',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: {
-              nomerorder:idorder,
-              id:idmenu,
-              date:today,
-              pesanan:menuname,
-              quantity:quantity,
-              diskon:discount,
-              hargasatuan:price,
-              hargaTotal:total,
-              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-            },
-            success: function(response){
-              obj = JSON.parse(response);
-              // alert(obj.message);
-              if (obj.message === "error") {
-                swal({
-                     title: "Input Order gagal!",
-                     text: "Periksa input dengan Benar",
-                     type: "warning",
-                     showCancelButton: true,
-                     confirmButtonColor: "#DD6B55",
-                     confirmButtonText: "Try Again!",
-                     closeOnConfirm: false
-                   },
-                     function(){
-                       swal("Okay!", "You got another chance.", "success");
-                 });
-              }
-              else {
-                swal("Good job!", "Berhasil Input Order", "success");
-              }
-            },
-            error: function(xhr, status, error){
-              alert(error);
-              // document.location.reload();
-            },
-            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-             //do smth if you need
-            //  document.location.reload();
-           }
-         });
 
          //kurangStokdiorder
          var querry = "http://localhost:3000/api/showMenuById?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
          $.get(querry).success(function(data){
-     				// $('#username').text(data.message.nama);
-            //  $('#username').html(data.message[0].nama);
-            // alert(data.message[0].komposisi);
             var composition = data.message[0].komposisi;
             var res = composition.split(",");
 
@@ -1481,20 +1437,91 @@ appControllers.controller('OrderController',['$scope','$http',
                 },
                 success: function(response){
                   obj = JSON.parse(response);
-                  //  alert(obj.message);
-                 swal({   title: "Saatnya Order?",   text: obj.message});
-                 //  document.location.reload();
+                  // alert(obj.message);
+                  // swal({   title: "Saatnya Order?",   text: obj.message});
+                  if (obj.message=="stock ini hampir habis") {
+                    var stockThat = "http://localhost:3000/api/getStockThatEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ";
+                     $.get(stockThat).success(function(data){
+                      //  alert(data.message.length);
+                      for (var j = 0; j < data.message.length; j++) {
+                          // alert(data.message[j].nama);
+                          $.ajax({
+                            url: domain + ':3000/api/showMenuFromKomposition',
+                            dataType: 'text',
+                            method: 'POST',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {
+                              name:data.message[j].nama,
+                              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+                            },
+                            success: function(response){
+                              alert(response);
+                            },
+                            error: function(xhr, status, error){
+                              alert(error);
+                            },
+                            complete: function(){
+                           }
+                         });
+                      }
+                    });
+                  }
                 },
                 error: function(xhr, status, error){
                   alert(error);
                 },
-                complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-                 //do smth if you need
-                //  document.location.reload();
+                complete: function(){
                }
              });
            }
      		});
+
+          $.ajax({
+            url: domain + ':3000/api/insertOrder',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              nomerorder:idorder,
+              id:idmenu,
+              date:today,
+              pesanan:menuname,
+              quantity:quantity,
+              diskon:discount,
+              hargasatuan:price,
+              hargaTotal:total,
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+              // alert(obj.message);
+              if (obj.message === "error") {
+                swal({
+                     title: "Input Order gagal!",
+                     text: "Periksa input dengan Benar",
+                     type: "warning",
+                     showCancelButton: true,
+                     confirmButtonColor: "#DD6B55",
+                     confirmButtonText: "Try Again!",
+                     closeOnConfirm: false
+                   },
+                     function(){
+                       swal("Okay!", "You got another chance.", "success");
+                 });
+              }
+              else {
+                swal("Good job!", "Berhasil Input Order", "success");
+              }
+            },
+            error: function(xhr, status, error){
+              alert(error);
+              // document.location.reload();
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
        }
      }
 
