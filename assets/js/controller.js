@@ -2736,6 +2736,24 @@ appControllers.controller('StockDetailController',['$scope','$http',
          }
        });
 
+       $.ajax({
+         url: domain + ':3000/api/reorderStok',
+         dataType: 'text',
+         method: 'POST',
+         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+         data: {
+           nama:name,
+           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+         },
+         success: function(response){
+         },
+         error: function(xhr, status, error){
+           alert(error);
+         },
+         complete: function(){
+        }
+      });
+
          //insertHistory
          $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
            $.ajax({
