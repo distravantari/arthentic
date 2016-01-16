@@ -514,38 +514,44 @@ appControllers.controller('RegisterController',['$scope','$http',
         var pass = $scope.form.password;
         var role = $scope.form.role;
         var perm = $scope.form.permission;
+        var passcode = $scope.form.passcode;
 
-        $.ajax({
-          url: domain + ':3000/api/registrasi',
-          dataType: 'text',
-          method: 'POST',
-          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-          data: {
-            nama: user,
-            role: role,
-            password: pass,
-            permission:perm,
-            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-          },
-          success: function(response){
-            obj = JSON.parse(response);
-            if (obj.message === ("Registrasi berhasil atas nama "+user)) {
-              window.location.assign(domain+":8080/arthentic/");
-            }
-            else {
-              // alert(obj.message);
-              // window.location.assign(domain+":8080/arthentic/#/dashboard")
-            }
-          },
-          error: function(xhr, status, error){
-            alert(error);
-            // document.location.reload();
-          },
-          complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-           //do smth if you need
-          //  document.location.reload();
-         }
-       });
+        // alert(passcode);
+        if(passcode == 'dstrvntr'){
+          $.ajax({
+            url: domain + ':3000/api/registrasi',
+            dataType: 'text',
+            method: 'POST',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {
+              nama: user,
+              role: role,
+              password: pass,
+              permission:perm,
+              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+            },
+            success: function(response){
+              obj = JSON.parse(response);
+              if (obj.message === ("Registrasi berhasil atas nama "+user)) {
+                window.location.assign(domain+":8080/arthentic/");
+              }
+              else {
+                // alert(obj.message);
+                // window.location.assign(domain+":8080/arthentic/#/dashboard")
+              }
+            },
+            error: function(xhr, status, error){
+              alert(error);
+              // document.location.reload();
+            },
+            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+             //do smth if you need
+            //  document.location.reload();
+           }
+         });
+        }else{
+          alert('YOU ARE NOT THE OWNER');
+        }
       }
       changeTitleHeader('THIS PAGE IS ONLY FOR OWNER');
     }
