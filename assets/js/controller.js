@@ -3,6 +3,96 @@ var domain = 'http://localhost';
 var fullMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+appControllers.controller('UserController',['$scope','$http',
+    function($scope,$http){
+      changeTitleHeader('User');
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+          //change hi, username
+          $('#username').html(data.message[0].nama);
+          var nama = data.message[0].nama;
+          //getPermissionByName
+          $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(responses){
+            var str = data.message[0].permission;
+            if (str.length <= 7) {
+              var ct = 7-str.length;
+              for (var i = 0; i < ct; i++) {
+                str += "0";
+              }
+            }
+            else {
+              str = str.substring(0, 7);
+            }
+            if (str.charAt(0)=="1") {
+              $('#showReports').removeClass('hidden');
+            }
+            if (str.charAt(1)=="1") {
+              $('#showMenu').removeClass('hidden');
+            }
+            if (str.charAt(2)=="1") {
+              $('#showOrder').removeClass('hidden');
+            }
+            if (str.charAt(3)=="1") {
+              $('#showStockDetail').removeClass('hidden');
+            }
+            if (str.charAt(4)=="1") {
+              $('#showData').removeClass('hidden');
+            }
+            if (str.charAt(5)=="1") {
+              $('#showExpenses').removeClass('hidden');
+            }
+            if (str.charAt(6)=="1") {
+              $('#showSetting').removeClass('hidden');
+            }
+
+            $.ajax({
+              url: domain + ':3000/api/userProfile',
+              dataType: 'text',
+              method: 'POST',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              data: {
+                username: data.message[0].nama,
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+              },
+              success: function(response){
+                obj = JSON.parse(response);
+                $(".username").text(obj.message[0].nama);
+                $(".role").text(obj.message[0].role);
+              },
+              error: function(xhr, status, error){
+                alert(error);
+              },
+              complete: function(){
+             }
+           });
+          });
+
+          $scope.delete = function(index) {
+            $.ajax({
+              url: domain + ':3000/api/deleteUser',
+              dataType: 'text',
+              method: 'POST',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              data: {
+                nama: data.message[0].nama,
+                token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+              },
+              success: function(response){
+                // alert(response);
+                document.location.assign('http://localhost:8080/arthentic/#/login');
+              },
+              error: function(xhr, status, error){
+                alert(error);
+              },
+              complete: function(){
+             }
+           });
+          }
+      });
+
+
+    }
+]);
+
 appControllers.controller('MenuController',['$scope','$http',
     function($scope,$http){
 
@@ -1177,8 +1267,8 @@ appControllers.controller('ExpensesReportsController',['$scope','$http',
           method: 'POST',
           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
           data: {
-            bulan:Number(mmExpenses),
-            tahun:Number(yyExpenses),
+            bulan:mmExpenses,
+            tahun:yyExpenses,
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
@@ -1187,7 +1277,9 @@ appControllers.controller('ExpensesReportsController',['$scope','$http',
             }
             $scope.expensesReports.splice(0, 1);
             idx = $scope.expensesReports.length-1;
-            $scope.loading = false;
+            $scope.loading = true;
+            // alert("bulan ="+mmExpenses +" tahun= "+yyExpenses);
+            // alert(response.message.length);
           },
           error: function(xhr, status, error){
             // alert(error);

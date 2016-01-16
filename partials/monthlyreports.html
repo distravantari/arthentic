@@ -35,16 +35,16 @@
                   <tbody>
                     <tr ng-repeat="income in incomes">
                       <td>
-                        <input type="text" ng-model="income.pesanan" class="form-control" placeholder="NAMA" value="{{ income.pesanan }}">
+                        <input type="text" ng-model="income.pesanan" class="form-control" placeholder="NAMA" value="{{ income.pesanan }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="income.quantity" class="form-control bfh-number" min=0 value="{{ income.quantity }}">
+                        <input type="number" ng-model="income.quantity" class="form-control bfh-number" min=0 value="{{ income.quantity }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="income.diskon" class="form-control bfh-number" min=0 value="{{ income.diskon }}">
+                        <input type="number" ng-model="income.diskon" class="form-control bfh-number" min=0 value="{{ income.diskon }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="income.hargaAkhir" class="form-control bfh-number" min=0 value="{{ income.hargaAkhir }}">
+                        <input type="number" ng-model="income.hargaAkhir" class="form-control bfh-number" min=0 value="{{ income.hargaAkhir }}" readonly>
                       </td>
                       <!-- <td>
                         <a href ng:click="SupprimerArticle($index)"><i class="fa fa-times delete"></i></a>
@@ -82,16 +82,16 @@
                   <tbody>
                     <tr ng-repeat="exp in exps">
                       <td>
-                        <input type="text" ng-model="exp.bulan" class="form-control bfh-number" placeholder="MM" min=0 value="{{ exp.bulan }}">
+                        <input type="text" ng-model="exp.bulan" class="form-control bfh-number" placeholder="MM" min=0 value="{{ exp.bulan }}" readonly>
                       </td>
                       <td>
-                        <input type="text" ng-model="exp.tahun" class="form-control" placeholder="YYYY" value="{{ exp.tahun }}">
+                        <input type="text" ng-model="exp.tahun" class="form-control" placeholder="YYYY" value="{{ exp.tahun }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="exp.namaPengeluaran" class="form-control bfh-number" min=0 value="{{ exp.namaPengeluaran }}">
+                        <input type="number" ng-model="exp.namaPengeluaran" class="form-control bfh-number" min=0 value="{{ exp.namaPengeluaran }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="exp.jumlah" class="form-control bfh-number" min=0 value="{{ exp.jumlah }}">
+                        <input type="number" ng-model="exp.jumlah" class="form-control bfh-number" min=0 value="{{ exp.jumlah }}" readonly>
                       </td>
                     </tr>
                     <tr class="success">
@@ -101,7 +101,7 @@
                         Total Pengeluaran Bulan <span>{{ getMonth() }}</span>
                       </td>
                       <td>
-                        <span class="success text-right" ng-model="exp.pengeluaran" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}">Rp. {{ totalPengeluaran() | number:2 }}</span>
+                        <span class="success text-right" ng-model="exp.pengeluaran" ng-style="PrixTotalHT() >= 1000 && {'font-weight': 'bold'}" readonly>Rp. {{ totalPengeluaran() | number:2 }}</span>
                       </td>
                     </tr>
                   </tbody>

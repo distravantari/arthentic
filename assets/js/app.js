@@ -13,6 +13,10 @@ unparApp.config(['$routeProvider',
           'templateUrl': 'partials/menu.html',
           'controller': 'MenuController' //capital awal dan belakang
         }).
+        when('/user', {
+          'templateUrl': 'partials/user.html',
+          'controller': 'UserController' //capital awal dan belakang
+        }).
         when('/login', {
           'templateUrl': 'partials/login.html',
           'controller': 'LoginController' //capital awal dan belakang

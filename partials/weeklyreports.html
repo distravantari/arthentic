@@ -41,19 +41,19 @@
                   <tbody>
                     <tr ng-repeat="week in weekly">
                       <td>
-                        <input type="text" ng-model="week.Id" class="form-control bfh-number" value="{{ week.Id }}">
+                        <input type="text" ng-model="week.Id" class="form-control bfh-number" value="{{ week.Id }}" readonly>
                       </td>
                       <td>
-                        <input type="text" ng-model="week.Pesanan" class="form-control" value="{{ week.Pesanan }}">
+                        <input type="text" ng-model="week.Pesanan" class="form-control" value="{{ week.Pesanan }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="week.Quantity" class="form-control bfh-number" min=0 value="{{ week.Quantity }}">
+                        <input type="number" ng-model="week.Quantity" class="form-control bfh-number" min=0 value="{{ week.Quantity }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhi }}">
+                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhi }}" readonly>
                       </td>
                       <td>
-                        <input type="number" ng-model="week.total" class="form-control bfh-number" min=0 value="{{ total($index) }}">
+                        <input type="number" ng-model="week.total" class="form-control bfh-number" min=0 value="{{ total($index) }}" readonly>
                       </td>
                     </tr>
                     <tr class="success">

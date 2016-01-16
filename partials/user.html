@@ -1,0 +1,54 @@
+<div class='content'>
+  <div class="container-fluid">
+    <div class="row">
+        <!-- <div class="col-sm-6">
+            <img class="user_profile_img" ng-src="assets/img/avatar/profile.png" alt="" width="76" height="76" />
+            <h1 class="user_profile_name">Radical</h1>
+            <p class="user_profile_info">Solution</p>
+            <p class="user_profile_info">Technology</p>
+        </div> -->
+    </div>
+    <hr/>
+    <div class="row" style="padding-top:30px">
+        <div class="col-md-12">
+            <form class="form-horizontal" role="form">
+                <h3 class="heading_a"><span class="heading_text">General info</span></h3>
+                <div class="form-group">
+                    <label for="profile_username" class="col-sm-2 control-label">Username :  <span type="text" class="username"></span></label>
+                </div>
+                <div class="form-group">
+                    <p for="profile_bday" class="col-sm-2 control-label">Role :   <span type="text" class="role"></span></p>
+                    <button class="btn-danger btn" align="right" ng:click="delete()">Delete</button>
+                </div>
+                <hr/>
+                <div class="form-group">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+      // function delete() {
+      //   $.ajax({
+      //     url: domain + ':3000/api/deleteUser',
+      //     dataType: 'text',
+      //     method: 'POST',
+      //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+      //     data: {
+      //       nama_delete: $('username').text,
+      //       token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+      //     },
+      //     success: function(response){
+      //       alert(response);
+      //     },
+      //     error: function(xhr, status, error){
+      //       alert(error);
+      //     },
+      //     complete: function(){
+      //    }
+      //  });
+      // }
+    </script>
+
+  </div>
+</div>
