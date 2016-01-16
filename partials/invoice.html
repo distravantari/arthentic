@@ -2,20 +2,20 @@
   <table border="0">
     <thead>
       <tr>
-        <th colspan="2"><img src="assets/img/coffee_logo.png" width="50px" height="50px" alt="" /></th>
+        <th colspan="2"><img src="assets/img/kirim.jpg" width="100px" height="50px" alt="" /></th>
       </tr>
       <tr>
-        <th colspan="2">Arthentic Coffe Shop</th>
+        <th colspan="2" style="font-size:13px;">Papertown Building</th>
       </tr>
       <tr>
-        <th colspan="2">Jl. Pandu Raya no.107,  Bogor Utara</th>
+        <th colspan="2" style="font-size:13px;">Jl. Pandu Raya no.107,  Bogor</th>
       </tr>
-      <tr>
+      <!-- <tr>
         <th colspan="2">Tel : (021)-1234567</th>
       </tr>
       <tr>
         <th colspan="2">Email : arthentic@coffe.com</th>
-      </tr>
+      </tr> -->
     </thead>
     <tbody>
       <tr>
@@ -23,15 +23,15 @@
       </tr>
       <tr ng-repeat="inv in invoice">
           <td class="text-left">
-            <span ng-model="inv.name">{{ inv.name }}</span>
+            <span ng-model="inv.name" style="font-size:10px;">{{ inv.name }}</span>
             <br>
-            <span ng-model="inv.kuantitas">{{ inv.kuantitas }}</span> x
+            <span ng-model="inv.kuantitas" style="font-size:10px;">{{ inv.kuantitas }}</span> x
             <br>
           </td>
           <td class="text-right">
-            <span ng-model="inv.hargaSatuan">{{ inv.hargaSatuan*inv.kuantitas | number:2 }}</span>
+            <span ng-model="inv.hargaSatuan" style="font-size:10px;">{{ inv.hargaSatuan*inv.kuantitas | number:2 }}</span>
             <br>
-            - <span ng-model="inv.dicount">{{ (inv.discount/100)*(inv.hargaSatuan*inv.kuantitas) | number :2 }}</span>
+            - <span ng-model="inv.dicount" style="font-size:10px;">{{ (inv.discount/100)*(inv.hargaSatuan*inv.kuantitas) | number :2 }}</span>
             <br>
             <!-- <span ng-model="inv.totalSatuan">{{ inv.totalSatuan | number:2 }}</span> -->
           </td>
@@ -42,31 +42,31 @@
         <td colspan="2"><hr style="border-top: dotted 1px;"></td>
       </tr>
       <tr>
-        <td class="text-right text-muted">Subtotal</td>
-        <td class="text-right">Rp. {{ SubTotal() | number:2 }}</td>
+        <td class="text-right text-muted" style="font-size:10px;">Subtotal</td>
+        <td class="text-right" style="font-size:10px;">Rp. {{ SubTotal() | number:2 }}</td>
       </tr>
       <tr>
-        <td class="text-right text-muted">Tax</td>
-        <td class="text-right">Rp. {{ 0.1*SubTotal() | number:2 }}</td>
+        <td class="text-right text-muted" style="font-size:10px;">Tax</td>
+        <td class="text-right" style="font-size:10px;">Rp. {{ 0.1*SubTotal() | number:2 }}</td>
       </tr>
       <tr>
-        <td class="text-right text-muted">Services</td>
-        <td class="text-right">Rp. {{ 0.05*SubTotal() | number:2 }}</td>
+        <td class="text-right text-muted" style="font-size:10px;">Services</td>
+        <td class="text-right" style="font-size:10px;">Rp. {{ 0.05*SubTotal() | number:2 }}</td>
       </tr>
       <tr>
-        <td class="text-right text-muted">GrandTotal</td>
-        <td class="text-right text-success">Rp. {{ 1.15*SubTotal() | number:2 }}</td>
+        <td class="text-right text-muted" style="font-size:10px;">GrandTotal</td>
+        <td class="text-right text-success" style="font-size:10px;">Rp. {{ 1.15*SubTotal() | number:2 }}</td>
       </tr>
       <tr>
-        <td class="text-right text-muted">Paid</td>
+        <td class="text-right text-muted" style="font-size:10px;">Paid</td>
         <td class="text-right text-success">
           <input type="number" ng-model="inv.total" id="total" class="text-right total form-control bfh-number" placeholder="0"/>
         </td>
       </tr>
       <tr>
-        <td class="text-right text-muted">ChangeDue</td>
+        <td class="text-right text-muted" style="font-size:10px;">ChangeDue</td>
         <td class="text-right text-success">
-          <span>Rp. {{ (inv.total - (1.15*SubTotal())) | number:2 }}</span>
+          <span style="font-size:10px;">Rp. {{ (inv.total - (1.15*SubTotal())) | number:2 }}</span>
         </td>
       </tr>
       <tr>
