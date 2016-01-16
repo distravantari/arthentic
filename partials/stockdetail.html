@@ -17,9 +17,12 @@
                     <th>Id Stock</th>
                     <th>Nama Stock</th>
                     <th>Jumlah</th>
+                    <th>Satuan</th>
                     <th>Harga Total</th>
                     <th>Confirm</th>
                     <th>Delete</th>
+                    <th>Status</th>
+                    <th>Reorder Point</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -34,6 +37,9 @@
                       <input type="number" ng-model="stock.jumlah" class="form-control bfh-number" value="{{stock.jumlah}}">
                     </td>
                     <td>
+                      <input type="text" ng-model="stock.satuan" class="form-control bfh-number" value="{{stock.satuan}}">
+                    </td>
+                    <td>
                       <input type="number" ng-model="stock.hargaTotal" class="form-control bfh-number" min=0 value="{{stock.hargaTotal}}">
                     </td>
                     <td>
@@ -41,6 +47,12 @@
                     </td>
                     <td>
                       <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
+                    </td>
+                    <td>
+                      <input type="text" ng-model="stock.status" class="form-control bfh-number" min=0 value="{{stock.status}}">
+                    </td>
+                    <td>
+                      <input type="text" ng-model="stock.reorder" class="form-control bfh-number" min=0 value="{{stock.reorder}}">
                     </td>
                   </tr>
                   <!-- <tr class="success">

@@ -2633,8 +2633,10 @@ appControllers.controller('StockDetailController',['$scope','$http',
           id: '',
           nama: '',
           jumlah: '',
+          satuan: '',
           hargaTotal: 0,
           hapus: '',
+          reorder:'',
         });
         idx++;
       };
@@ -2701,7 +2703,9 @@ appControllers.controller('StockDetailController',['$scope','$http',
         var id = $scope.stocks[index].id;
         var name = $scope.stocks[index].nama;
         var jumlah = $scope.stocks[index].jumlah;
+        var satuan = $scope.stocks[index].satuan;
         var hargaTotal = $scope.stocks[index].hargaTotal;
+        var reorder = $scope.stocks[index].reorder;
 
         $.ajax({
           url: domain + ':3000/api/updateStock',
@@ -2713,7 +2717,9 @@ appControllers.controller('StockDetailController',['$scope','$http',
             idBaru:id,
             namaBaru:name,
             jumBaru:jumlah,
+            satuan:satuan,
             harBaru:hargaTotal,
+            reorder:reorder,
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
@@ -2790,6 +2796,9 @@ appControllers.controller('StockDetailController',['$scope','$http',
         var id = $scope.stocks[idx].id;
         var name = $scope.stocks[idx].nama;
         var jumlah = $scope.stocks[idx].jumlah;
+        //new
+        var satuan = $scope.stocks[idx].satuan;
+        var reorder = $scope.stocks[index].reorder;
         var hargaTotal = $scope.stocks[idx].hargaTotal;
 
          $.ajax({
@@ -2801,7 +2810,9 @@ appControllers.controller('StockDetailController',['$scope','$http',
              id:id,
              nama:name,
              jumlah:jumlah,
+             satuan:satuan,
              hargaTotal:hargaTotal,
+             reorder:reorder,
              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
            },
            success: function(response){
