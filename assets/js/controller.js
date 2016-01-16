@@ -2717,9 +2717,9 @@ appControllers.controller('StockDetailController',['$scope','$http',
             idBaru:id,
             namaBaru:name,
             jumBaru:jumlah,
-            satuan:satuan,
+            satuanBaru:satuan,
             harBaru:hargaTotal,
-            reorder:reorder,
+            reorderBaru:reorder,
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
@@ -2798,7 +2798,7 @@ appControllers.controller('StockDetailController',['$scope','$http',
         var jumlah = $scope.stocks[idx].jumlah;
         //new
         var satuan = $scope.stocks[idx].satuan;
-        var reorder = $scope.stocks[index].reorder;
+        var reorder = $scope.stocks[idx].reorder;
         var hargaTotal = $scope.stocks[idx].hargaTotal;
 
          $.ajax({
