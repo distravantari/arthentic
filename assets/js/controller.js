@@ -183,6 +183,7 @@ appControllers.controller('MenuController',['$scope','$http',
        var name = $scope.menu[index].nama;
        var composition = $scope.menu[index].komposisi;
        var price = $scope.menu[index].harga;
+       var hargaProduksi = $scope.menu[index].hargaProduksi;
        var quantity = $scope.menu[index].kuantitas;
 
        $.ajax({
@@ -197,13 +198,14 @@ appControllers.controller('MenuController',['$scope','$http',
            komposisiBaru:composition,
            hargaBaru:price,
            kuantitasBaru:quantity,
+           hargaProduksi:hargaProduksi,
            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
          },
          success: function(response){
            obj = JSON.parse(response);
           //  alert(obj.message);
-          // swal({   title: "Sweet!",   text: "successfully updated"});
-          //  document.location.reload();
+          swal({   title: "Sweet!",   text: "successfully updated"});
+           document.location.reload();
          },
          error: function(xhr, status, error){
            alert(error);
@@ -250,6 +252,7 @@ appControllers.controller('MenuController',['$scope','$http',
        var name = $scope.menu[idx].nama;
        var composition = $scope.menu[idx].komposisi;
        var price = $scope.menu[idx].harga;
+       var hargaProduksi = $scope.menu[idx].hargaProduksi;
        var quantity = $scope.menu[idx].kuantitas;
 
         $.ajax({
@@ -263,20 +266,22 @@ appControllers.controller('MenuController',['$scope','$http',
             komposisi:composition,
             harga:price,
             kuantitas:quantity,
+            hargaProduksi:hargaProduksi,
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
             obj = JSON.parse(response);
-            if (obj.message === "input menu berhasil dengan nama "+name) {
-              // alert(obj.message);
-              swal("Good job!", obj.message, "success");
-              // document.location.reload();
-              $('#btnplus').removeClass('hidden');
-            }
-            else {
-              // alert("input tidak boleh kosong");
-              swal({   title: "Alert!",   text: "input tidak boleh kosong.",   timer: 2000,   showConfirmButton: false });
-            }
+            // if (obj.message === "input menu berhasil dengan nama "+name) {
+            //   // alert(obj.message);
+            //   swal("Good job!", obj.message, "success");
+            //   // document.location.reload();
+            //   $('#btnplus').removeClass('hidden');
+            // }
+            // else {
+            //   // alert("input tidak boleh kosong");
+            //   swal({   title: "Alert!",   text: "input tidak boleh kosong.",   timer: 2000,   showConfirmButton: false });
+            // }
+            alert(obj.message);
           },
           error: function(xhr, status, error){
             alert(error);
@@ -954,7 +959,7 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
         var resultHT =0;
 
          angular.forEach($scope.incomes, function (income) {
-           resultHT += income.hargaAkhir;
+           resultHT += income.HargaAkhir;
          });
         //  $scope.income.pendapatan = resultHT;
         return resultHT;
@@ -1002,6 +1007,7 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
         var temp = date.split("/");
         var mmMon = temp[0];
         var yyMon = temp[2];
+        // alert("bulan = "+mmMon+" year= "+yyMon);
         $.ajax({
           url: domain + ':3000/api/hitungBulanan',
           dataType: 'JSON',
@@ -1015,9 +1021,11 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
           success: function(response){
             for (var i = 0; i < response.message.length; i++) {
               $scope.incomes.push(response.message[i]);
+              // alert("haha = "+$scope.incomes);
             }
             $scope.incomes.splice(0, 1);
             $scope.loading = false;
+            // alert("haha = "+response.message[0]);
           },
           error: function(xhr, status, error){
             alert(error);
@@ -1477,12 +1485,15 @@ appControllers.controller('OrderController',['$scope','$http',
          var querry = "http://localhost:3000/api/showMenuById?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
          $.get(querry).success(function(data){
             var composition = data.message[0].komposisi;
+            var hargaProduksii = data.message[0].hargaProduksi;
             var res = composition.split(",");
 
             for (var i = 0; i < res.length; i++) {
               var stock = res[i].split(" ");
               var namaStock = stock[0];
               var jumlahStock = stock[1];
+              // var jumlahProduksi = Number(data.message[0].hargaProduksi)*quantity;
+              // alert(data.message[0].hargaProduksi);
               var total = jumlahStock*quantity;
                $.ajax({
                  url: domain + ':3000/api/kurangStok',
@@ -1587,7 +1598,7 @@ appControllers.controller('OrderController',['$scope','$http',
               quantity:quantity,
               diskon:discount,
               hargasatuan:price,
-              hargaTotal:total,
+              hargaTotal:(price*quantity)-(price*quantity*(discount/100)),
               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
             },
             success: function(response){
