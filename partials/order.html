@@ -12,6 +12,7 @@
                     <tr>
                       <th>ID Order</th>
                       <th>ID Menu</th>
+                      <th>Confirm</th>
                       <th>Menu Name</th>
                       <th>Price</th>
                       <th>Quantity</th>
@@ -29,10 +30,13 @@
                         <input type="text" ng-model="article.reference" id="idmenu" class="idmenu form-control bfh-number" placeholder="MNx">
                       </td>
                       <td>
-                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" value="{{ getMenuById($index) }}" readonly>
+                        <a href ng:click="inputmenu($index)" class="btn btn-primary" style="background-color:orange !important;border:none">GO<i class="fa fa-chevron-right"></i></a>
                       </td>
                       <td>
-                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" value="{{ getMenuById($index) }}" readonly>
+                        <input type="text" ng-model="article.titre" id="menuname"class="menuname form-control" placeholder="Name" readonly>
+                      </td>
+                      <td>
+                        <input type="number" ng-model="article.price" id="price" class="price form-control bfh-number" placeholder="0" readonly>
                       </td>
                       <td>
                         <input type="number" ng-model="article.quantity" id="quantity" class="quantity form-control bfh-number" placeholder="0" min=0>
@@ -52,12 +56,14 @@
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success"></td>
+                      <td class="success"></td>
                       <td class="success">{{ NumberOrder() }} Jumlah Pesanan(s)</td>
                       <th class="success" style="text-align:right;">SubTotal : </th>
                       <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }} </td>
                       <td class="success"></td>
                     </tr>
                     <tr class="success">
+                      <td class="success"></td>
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success"></td>
@@ -73,8 +79,33 @@
                       <td class="success"></td>
                       <td class="success"></td>
                       <td class="success"></td>
+                      <td class="success"></td>
                       <th class="success" style="text-align:right;">GrandTotal : </th>
                       <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{1.15*SubTotal() | number:2 }} </td>
+                      <td class="success"></td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <th class="success" style="text-align:right;">Paid : </th>
+                      <td class="success">
+                        <input type="number" ng-model="article.paid" id="total"  class="total form-control bfh-number" placeholder="0" style="text-align:right;">
+                      </td>
+                      <td class="success"></td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <th class="success" style="text-align:right;">ChangeDue : </th>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{article.paid - (1.15*SubTotal()) | number:2 }} </td>
                       <td class="success"></td>
                     </tr>
                   </tbody>

@@ -41,6 +41,10 @@ unparApp.config(['$routeProvider',
           'templateUrl': 'partials/order.html',
           'controller': 'OrderController' //capital awal dan belakang
         }).
+        when('/todaysorder', {
+          'templateUrl': 'partials/todaysorder.html',
+          'controller': 'TodaysOrderController' //capital awal dan belakang
+        }).
         when('/dailyreports', {
           'templateUrl': 'partials/dailyreports.html',
           'controller': 'DailyReportsController' //capital awal dan belakang

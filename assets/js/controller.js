@@ -5,6 +5,7 @@ var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oc
 
 appControllers.controller('UserController',['$scope','$http',
     function($scope,$http){
+      $('.bars').removeClass('hidden');
       changeTitleHeader('User');
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
           //change hi, username
@@ -203,8 +204,6 @@ appControllers.controller('MenuController',['$scope','$http',
          },
          success: function(response){
            obj = JSON.parse(response);
-          //  alert(obj.message);
-          swal({   title: "Sweet!",   text: "successfully updated"});
            document.location.reload();
          },
          error: function(xhr, status, error){
@@ -584,6 +583,12 @@ appControllers.controller('InvoiceController',['$scope','$http','$window',
             swal("Good job!", data.message, "success");
     				$scope.loading = false;
     		});
+        document.location.reload();
+      }
+
+      $scope.getCash = function () {
+        var cash = $scope.invoice[0].paid;
+        return cash;
       }
 
       $scope.printInvoice = function () {
@@ -594,10 +599,10 @@ appControllers.controller('InvoiceController',['$scope','$http','$window',
        $window.print();
        printButton.style.visibility = 'visible';
        deleteButton.style.visibility = 'visible';
-       $http.get('http://localhost:3000/api/deleteInvoices?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
-           swal("Good job!", data.message, "success");
-           $scope.loading = false;
-       });
+      //  $http.get('http://localhost:3000/api/deleteInvoices?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ').success(function(data){
+      //      swal("Good job!", data.message, "success");
+      //      $scope.loading = false;
+      //  });
       }
 
       $scope.SubTotal = function () {
@@ -798,6 +803,7 @@ appControllers.controller('DailyReportsController',['$scope','$http',
 appControllers.controller('WeeklyReportsController',['$scope','$http',
     function($scope,$http){
       $scope.weekly = [{}];
+      $('.bars').removeClass('hidden');
 
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
     				//change hi, username
@@ -839,6 +845,11 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
         		});
   		});
 
+      $scope.clear = function () {
+        var length = $scope.weekly.length;
+        $scope.weekly.splice(0, length);
+      }
+
       $scope.total = function (idx) {
         var price = $scope.weekly[idx].HargaAkhir;
         var quantity = $scope.weekly[idx].Quantity;
@@ -850,24 +861,25 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
         var resultHT =0;
 
          angular.forEach($scope.weekly, function (week) {
-           resultHT += week.total;
+           resultHT += week.HargaAkhir;
          });
 
         return resultHT;
       }
 
       $scope.proceed = function () {
+        var result = [{}];
+
         $('.bars').removeClass('hidden');
         var startdate = $scope.input.startdate;
         var enddate = $scope.input.enddate;
-
         // split startdate
         var tempS = startdate.split("/");
         startdate = tempS[2]+"/"+tempS[0]+"/"+tempS[1];
 
         // split enddate
         var tempE = enddate.split("/");
-        enddate = tempE[2]+"/"+tempE[0]+"/"+tempE[1];
+        enddate = tempE[2]+"/"+tempE[0]+"/"+(Number(tempE[1]));
 
         $.ajax({
           url: domain + ':3000/api/hitungMingguan',
@@ -880,8 +892,32 @@ appControllers.controller('WeeklyReportsController',['$scope','$http',
             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
           },
           success: function(response){
+            var ct = 0;
+
             for (var i = 0; i < response.message.length; i++) {
-              $scope.weekly.push(response.message[i]);
+              result.push(response.message[i]);
+            }
+            for (var i = 0; i < response.message.length; i++) {
+              // alert(result[i].Date+", "+res[i].HargaAkhir);
+              var tempDate = response.message[i].Date.split("T");
+              var temptanggal = tempDate[0].split("-");
+              var temphari = temptanggal[2];
+              var tempbulan = temptanggal[1];
+              var temptahun = temptanggal[0];
+              var hari = Number(temphari)+1;
+              var tanggal = temptahun+"/"+tempbulan+"/"+hari;
+              if (result[ct] == undefined || tanggal != result[ct].Date) {
+                ct++;
+                // result[ct].Date = response.message[i].Date;
+                result[ct].Date = tanggal;
+                result[ct].HargaAkhir = response.message[i].HargaAkhir;
+              }
+              else {
+                result[ct].HargaAkhir -= -response.message[i].HargaAkhir;
+              }
+            }
+            for (var i = 0; i <= ct; i++) {
+              $scope.weekly.push(result[i]);
             }
             $scope.weekly.splice(0, 1);
             $scope.loading = false;
@@ -1374,10 +1410,8 @@ appControllers.controller('OrderController',['$scope','$http',
         $scope.articles[i].id = ord;
       }
 
-      $scope.getMenuById = function (idx) {
-        // alert(i);
+      $scope.inputmenu = function (idx) {
         var idmenu = $scope.articles[idx].reference;
-
         $.ajax({
           url: domain + ':3000/api/showMenuById',
           dataType: 'JSON',
@@ -1389,14 +1423,19 @@ appControllers.controller('OrderController',['$scope','$http',
           },
           success: function(response){
             // alert(response.message[0].nama);
-            if (response.message[0].nama == 'menu habis/tidak ada') {
-              $scope.articles[idx].titre = response.message[0].nama;
-            }else{
-              var harga = Number(response.message[0].harga)
-              $scope.articles[idx].price = harga;
-              $scope.articles[idx].titre = response.message[0].nama;
-            }
+            var name = response.message[0].nama
+            var harga = Number(response.message[0].harga)
 
+            $scope.articles[idx].price = harga;
+            $scope.articles[idx].titre = name;
+
+            // if (name == 'menu habis/tidak ada') {
+            //   $scope.articles[idx].titre = name;
+            //   $scope.articles[idx].price = 0;
+            // }else{
+            //   $scope.articles[idx].price = harga;
+            //   $scope.articles[idx].titre = name;
+            // }
           },
           error: function(xhr, status, error){
             // alert(error);
@@ -1575,6 +1614,19 @@ appControllers.controller('OrderController',['$scope','$http',
                       }
                     });
                   }
+                  //setmenuready
+                  var querry = "http://localhost:3000/api/setMenuReady?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+                  $.get(querry).success(function(data){
+                    if (data.message == "sukses") {
+                      var nextQuerry = "http://localhost:3000/api/setMenuEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+                      $.get(nextQuerry).success(function(data){
+                        if (data.message == "done") {
+                          swal("Done!", "Order have been Saved.", "success");
+                        }
+                      });
+                    }
+                  });
+
                 },
                 error: function(xhr, status, error){
                   alert(error);
@@ -1635,6 +1687,7 @@ appControllers.controller('OrderController',['$scope','$http',
      }
 
      $scope.print = function () {
+       var paid = $scope.article.paid;
        for (var i = 0; i < $scope.articles.length; i++) {
 
          var name = $scope.articles[i].titre;
@@ -1654,6 +1707,7 @@ appControllers.controller('OrderController',['$scope','$http',
              satuan:total,
              diskon:diskon,
              hargaSatuan:price,
+             paid:paid,
              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
            },
            success: function(response){
@@ -1674,6 +1728,179 @@ appControllers.controller('OrderController',['$scope','$http',
      }
 
       changeTitleHeader('RADICAL Order');
+    }
+]);
+
+appControllers.controller('TodaysOrderController',['$scope','$http',
+    function($scope,$http){
+
+      $scope.dailys = [{}];
+      //getDate
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      today = yyyy+'/'+mm+'/'+dd;
+
+      $.ajax({
+        url: domain + ':3000/api/hitungHarian',
+        dataType: 'JSON',
+        method: 'POST',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: {
+          date: today,
+          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+        },
+        success: function(response){
+          // alert(response.message.length);
+          for (var i = 0; i < response.message.length; i++) {
+            $scope.dailys.push(response.message[i]);
+          }
+          $scope.dailys.splice(0, 1);
+          $scope.loading = false;
+          // alert(response.message[0].Id);
+          // window.location.assign(domain+":8080/arthentic/#/dashboard")
+        },
+        error: function(xhr, status, error){
+          alert(error);
+          // document.location.reload();
+        },
+        complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+         //do smth if you need
+        //  document.location.reload();
+       }
+     });
+
+     $scope.total = function (idx) {
+       var price = $scope.dailys[idx].HargaAkhir;
+       var quantity = $scope.dailys[idx].Quantity;
+      //  alert(price*quantity);
+       $scope.dailys[idx].total = Number(price)*Number(quantity);
+     }
+
+     $scope.SubTotal = function () {
+       var resultHT =0;
+
+        angular.forEach($scope.dailys, function (daily) {
+          resultHT += daily.total;
+        });
+
+       return resultHT;
+     }
+
+     $scope.delete = function(index) {
+       var idmenu = $scope.dailys[index].Id;
+       var quantity = $scope.dailys[index].Quantity;
+       var hargaAkhir = $scope.dailys[index].HargaAkhir;
+
+      //  alert(idmenu);
+      var querry = "http://localhost:3000/api/showMenuById?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+      $.get(querry).success(function(data){
+        var composition = data.message[0].komposisi;
+        var hargaProduksii = data.message[0].hargaProduksi;
+        var res = composition.split(",");
+
+        for (var i = 0; i < res.length; i++) {
+          var stock = res[i].split(" ");
+          var namaStock = stock[0];
+          var jumlahStock = stock[1];
+          // var jumlahProduksi = Number(data.message[0].hargaProduksi)*quantity;
+          // alert(data.message[0].hargaProduksi);
+          var total = jumlahStock*quantity;
+           $.ajax({
+             url: domain + ':3000/api/tambahStoks',
+             dataType: 'text',
+             method: 'POST',
+             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             data: {
+               nama:namaStock,
+               jumPenambahan:total,
+               token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+             },
+             success: function(response){
+               obj = JSON.parse(response);
+               swal({   title: "Deleted!",   text: "successfully updated"+obj.message});
+             },
+             error: function(xhr, status, error){
+               alert(error);
+             },
+             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+              //do smth if you need
+             //  document.location.reload();
+            }
+          });
+        }
+      });
+
+      // alert(idmenu+", "+hargaAkhir+", "+today);
+      $.ajax({
+        url: domain + ':3000/api/deleteOrder',
+        dataType: 'text',
+        method: 'POST',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: {
+          id:idmenu,
+          HargaAkhir:hargaAkhir,
+          Date:today,
+          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+        },
+        success: function(response){
+          obj = JSON.parse(response);
+          swal({   title: "Deleted!",   text: "successfully updated"+obj.message});
+          document.location.reload();
+        },
+        error: function(xhr, status, error){
+          alert(error);
+        },
+        complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+         //do smth if you need
+        //  document.location.reload();
+       }
+     });
+    }
+
+      $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
+    				//change hi, username
+            $('#username').html(data.message[0].nama);
+            var nama = data.message[0].nama;
+            //getPermissionByName
+            $.get('http://localhost:3000/api/showPermission?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&nama='+nama).success(function(response){
+              var str = data.message[0].permission;
+              if (str.length <= 7) {
+                var ct = 7-str.length;
+                for (var i = 0; i < ct; i++) {
+                  str += "0";
+                }
+              }
+              else {
+                str = str.substring(0, 7);
+              }
+              if (str.charAt(0)=="1") {
+                $('#showReports').removeClass('hidden');
+              }
+              if (str.charAt(1)=="1") {
+                $('#showMenu').removeClass('hidden');
+              }
+              if (str.charAt(2)=="1") {
+                $('#showOrder').removeClass('hidden');
+              }
+              if (str.charAt(3)=="1") {
+                $('#showStockDetail').removeClass('hidden');
+              }
+              if (str.charAt(4)=="1") {
+                $('#showData').removeClass('hidden');
+              }
+              if (str.charAt(5)=="1") {
+                $('#showExpenses').removeClass('hidden');
+              }
+              if (str.charAt(6)=="1") {
+                $('#showSetting').removeClass('hidden');
+              }
+        		});
+  		});
+
+      $('.bars').removeClass('hidden');
+      changeTitleHeader('RADICAL TODAYS ORDER');
     }
 ]);
 
@@ -2834,16 +3061,13 @@ appControllers.controller('StockDetailController',['$scope','$http',
           success: function(response){
             obj = JSON.parse(response);
             if (obj.message === "Berhasil mengganti nama ") {
-              // alert("Data telah di Update");
               swal({   title: "Sweet!",   text: "successfully updated"});
               document.location.reload();
             }
             else {
-              alert(obj.message);
             }
           },
           error: function(xhr, status, error){
-            alert(error);
           },
           complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
            //do smth if you need
@@ -2863,7 +3087,6 @@ appControllers.controller('StockDetailController',['$scope','$http',
          success: function(response){
          },
          error: function(xhr, status, error){
-           alert(error);
          },
          complete: function(){
         }
@@ -2885,13 +3108,12 @@ appControllers.controller('StockDetailController',['$scope','$http',
              },
              success: function(response){
                obj = JSON.parse(response);
-              //  alert(obj.message);
               swal({   title: "Sweet!",   text: "successfully updated"});
               document.location.reload();
               //  document.location.reload();
              },
              error: function(xhr, status, error){
-               alert(error);
+              //  alert(error);
              },
              complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
               //do smth if you need
@@ -2937,7 +3159,7 @@ appControllers.controller('StockDetailController',['$scope','$http',
              }
            },
            error: function(xhr, status, error){
-             alert(error);
+            //  alert(error);
            },
            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
             //do smth if you need
@@ -2967,7 +3189,7 @@ appControllers.controller('StockDetailController',['$scope','$http',
              //  document.location.reload();
             },
             error: function(xhr, status, error){
-              alert(error);
+              // alert(error);
             },
             complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
              //do smth if you need
@@ -2980,123 +3202,3 @@ appControllers.controller('StockDetailController',['$scope','$http',
       changeTitleHeader('RADICAL Stock Detail');
     }
 ]);
-
-var x;
-appControllers.controller('AspirasiController',['$scope','$http','$routeParams', function($scope,$http,$routeParams){
-  $('.bars').removeClass('hidden');
-		$scope.submitAspiration = function(){
-				// showLoader(true);
-				var name = $scope.form.name;
-	      var content = $scope.form.content;
-				var img_base64 = $scope.img_base64;
-
-				if(content == undefined || content == ""){
-						alert("content harus diisi");
-				}else {
-						$.ajax({
-							url: domain + '/aspirations',
-							method: 'POST',
-							data: {
-								content: content,
-								name: name,
-								img_base64: img_base64
-							},
-							success: function(response){
-								alert('Aspirasi sudah terkirim!');
-							},
-							error: function(xhr, status, error){
-								alert(error);
-							}
-						})
-				}
-		}
-
-		$scope.thumbsup = function(id_aspirasi){
-			var code = $scope.code;
-			// var status = $scope.status;
-
-			$.ajax({
-				url: domain + '/thumbs',
-				method: 'POST',
-				data: {
-					id_aspirasi: id_aspirasi,
-					code: 1,
-					status: 1
-				},
-				success: function(response){
-					// window.location.reload();
-					alert('like');
-					// $(this).addClass('text-success');
-				},
-				error: function(xhr, status, error){
-					alert(error);
-				},
-				complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-			   //do smth if you need
-			   document.location.reload();
-			 }
-			})
-		}
-
-		$scope.thumbsdown = function(id_aspirasi){
-			var code = $scope.code;
-			// var status = $scope.status;
-
-			$.ajax({
-				url: domain + '/thumbs',
-				method: 'POST',
-				data: {
-					id_aspirasi: id_aspirasi,
-					code: 1,
-					status: 0
-				},
-				success: function(response){
-					// window.location.reload();
-					alert('dislike');
-					// $(this).addClass('text-danger');
-				},
-				error: function(xhr, status, error){
-					alert(error);
-				},
-				complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-			   //do smth if you need
-			   document.location.reload();
-			 }
-			})
-		}
-
-		$scope.busy = false;
-
-		$scope.backLinkClick = function () {
-  		window.location.reload();
-		};
-
-		$http.get(domain + '/aspirations').success(function(data){
-				$scope.aspiration=data;
-				x = data;
-				$scope.loading = false;
-		});
-
-		var page = 1;
-		$scope.myPagingFunction = function(){
-			if (this.busy) return;
-			$scope.busy = true;
-			$http.get(domain + '/aspiration?page='+page).success(function(data,status,headers,config){
-				if(headers('X-Pagination-Page-Count') < page){
-					$scope.busy = false;
-					return;
-				}
-				console.log(headers('link'));
-					for (var i = 0; i < data.length; i++) {
-						if ($scope.aspiration != undefined && $scope.aspiration != null && $scope.aspiration != "") {
-							$scope.aspiration.push(data[i]);
-						}
-					}
-					$scope.loading = false;
-					$scope.busy = false;
-					page++;
-			});
-		}
-
-		changeTitleHeader('Aspirasi');
-}]);

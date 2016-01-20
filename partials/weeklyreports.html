@@ -8,7 +8,7 @@
               <div class="col-md-12">
                 <div class="col-md-3">
                   start date :
-                  <input type="text" ng-model="input.startdate" name="date" id="datepicker" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                  <input type="text" ng:click="clear()" ng-model="input.startdate" name="date" id="datepicker" class="form-control bfh-number" placeholder="YYYY/MM/DD">
                 </div>
                 <script>
                 $(function() {
@@ -17,7 +17,7 @@
                 </script>
                   <div class="col-md-3">
                     end date :
-                    <input type="text" ng-model="input.enddate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD" id="datepicker2">
+                    <input type="text" ng:click="clear()" ng-model="input.enddate" name="date" class="form-control bfh-number" placeholder="YYYY/MM/DD" id="datepicker2">
                   </div>
                   <script>
                   $(function() {
@@ -26,41 +26,27 @@
                   </script>
                 <div class="col-md-3">
                   <br>
-                  <a href ng:click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
+                  <a href ng-click="proceed()" class="btn btn-primary" style="background-color:black !important;border:none">Ok</a>
                 </div>
                 <table class="table table-striped table-hover table-responsive">
                   <thead>
                     <tr>
-                      <th>ID Menu</th>
-                      <th>Nama Menu</th>
-                      <th>Kuantitas Terjual</th>
-                      <th>Harga</th>
+                      <th>Tanggal</th>
                       <th>Jumlah Pendapatan</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="week in weekly">
                       <td>
-                        <input type="text" ng-model="week.Id" class="form-control bfh-number" value="{{ week.Id }}" readonly>
+                        <input type="text" ng-model="week.Date" class="form-control bfh-number" value="{{ week.Date }}" readonly>
                       </td>
                       <td>
-                        <input type="text" ng-model="week.Pesanan" class="form-control" value="{{ week.Pesanan }}" readonly>
-                      </td>
-                      <td>
-                        <input type="number" ng-model="week.Quantity" class="form-control bfh-number" min=0 value="{{ week.Quantity }}" readonly>
-                      </td>
-                      <td>
-                        <input type="number" ng-model="week.HargaAkhir" class="form-control bfh-number" min=0 value="{{ week.HargaAkhi }}" readonly>
-                      </td>
-                      <td>
-                        <input type="number" ng-model="week.total" class="form-control bfh-number" min=0 value="{{ total($index) }}" readonly>
+                        <input style="text-align:right;" type="text" ng-model="week.HargaAkhir" class="form-control" value="{{ week.HargaAkhir }}" readonly>
                       </td>
                     </tr>
                     <tr class="success">
-                      <th class="success"></th>
-                      <td class="success"></td>
-                      <td class="success">Total Pendapatan Hari Ini</td>
-                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }}</td>
+                      <td class="success" style="text-align:right;">Total Pendapatan</td>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}" style="text-align:right;">Rp. {{ SubTotal() | number:2 }}</td>
                       <td class="success"></td>
                     </tr>
                   </tbody>

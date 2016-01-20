@@ -1,0 +1,57 @@
+<div class='content'>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+          <h1><span style="color:black">Today's</span> <span style="color:orange">Order</span></h1>
+            <div class="content">
+              <div class="col-md-12">
+                <table class="table table-striped table-hover table-responsive">
+                  <thead>
+                    <tr>
+                      <th>ID Menu</th>
+                      <th>Nama Menu</th>
+                      <th>Kuantitas Terjual</th>
+                      <th>Harga</th>
+                      <th>Jumlah Pendapatan</th>
+                      <th>Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="daily in dailys" class="tables">
+                      <td>
+                        <input type="text" ng-model="daily.Id" class="form-control bfh-number" value="{{ daily.Id }}" readonly>
+                      </td>
+                      <td>
+                        <input type="text" ng-model="daily.Pesanan" class="form-control" value="{{ daily.Pesanan }}" readonly>
+                      </td>
+                      <td>
+                        <input type="number" ng-model="daily.Quantity" class="form-control bfh-number" value="{{ daily.Quantity }}" readonly>
+                      </td>
+                      <td>
+                        <input type="number" ng-model="daily.HargaAkhir" class="form-control bfh-number" value="{{ daily.HargaAkhir | number:2 }}" readonly>
+                      </td>
+                      <td>
+                        <input type="text" ng-model="daily.total" class="form-control bfh-number" value="{{ total($index) }}" readonly>
+                      </td>
+                      <td>
+                        <a href ng:click="delete($index)"><i class="fa fa-times delete fa-2x"></i></a>
+                      </td>
+                    </tr>
+                    <tr class="success">
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success"></td>
+                      <td class="success">Total Pendapatan Hari Ini</td>
+                      <td class="success" ng-style="SubTotal() >= 1000 && {'font-weight': 'bold'}">Rp. {{ SubTotal() | number:2 }}</td>
+                      <td class="success"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <a href ng:click="AjouterArticle()" class="btn btn-primary">Tambah <i class="fa fa-plus"></i></a> -->
+              </div>
+            </div>
+
+        </div>
+    </div>
+  </div>
+</div>
