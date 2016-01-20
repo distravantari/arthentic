@@ -6,7 +6,7 @@
             <div class="content">
               <div class="col-md-12">
                 <div class="col-md-3">
-                  <input type="text" ng-model="input.tanggal" name="date" id="datepicker" class="form-control bfh-number" placeholder="YYYY/MM/DD">
+                  <input type="text" ng-model="input.tanggal" ng:click="clear()" name="date" id="datepicker" class="form-control bfh-number" placeholder="YYYY/MM/DD">
                   <script>
                   $(function() {
                     $( "#datepicker" ).datepicker();

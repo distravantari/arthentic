@@ -743,6 +743,11 @@ appControllers.controller('DailyReportsController',['$scope','$http',
         		});
   		});
 
+      $scope.clear = function () {
+        var length = $scope.dailys.length;
+        $scope.dailys.splice(0, length);
+      }
+
       $scope.total = function (idx) {
         var price = $scope.dailys[idx].HargaAkhir;
         var quantity = $scope.dailys[idx].Quantity;
@@ -782,7 +787,6 @@ appControllers.controller('DailyReportsController',['$scope','$http',
             for (var i = 0; i < response.message.length; i++) {
               $scope.dailys.push(response.message[i]);
             }
-            $scope.dailys.splice(0, 1);
             $scope.loading = false;
             // alert(response.message[0].Id);
             // window.location.assign(domain+":8080/arthentic/#/dashboard")
@@ -982,6 +986,14 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
       		});
   		});
 
+      $scope.clear = function () {
+        var incomeslength = $scope.incomes.length;
+        var expslength = $scope.exps.length;
+
+        $scope.incomes.splice(0, incomeslength);
+        $scope.exps.splice(0, expslength);
+      }
+
       $scope.getMonth = function () {
         var date = $scope.input.month;
 
@@ -1059,7 +1071,6 @@ appControllers.controller('MonthlyReportsController',['$scope','$http',
               $scope.incomes.push(response.message[i]);
               // alert("haha = "+$scope.incomes);
             }
-            $scope.incomes.splice(0, 1);
             $scope.loading = false;
             // alert("haha = "+response.message[0]);
           },
@@ -1169,6 +1180,9 @@ appControllers.controller('ExpensesController',['$scope','$http',
            var tahunexp = $scope.expenses[i].tahun;
            var namaexp = $scope.expenses[i].namaPengeluaran;
            var jumlahexp = $scope.expenses[i].jumlah;
+           if (bulanexp.length == 1) {
+             bulanexp = "0"+bulanexp;
+           }
 
            $.ajax({
              url: domain + ':3000/api/insertPengeluaran',
@@ -1284,6 +1298,11 @@ appControllers.controller('ExpensesReportsController',['$scope','$http',
         		});
   		});
 
+      $scope.clear = function () {
+        var explength = $scope.expensesReports.length;
+        $scope.expensesReports.splice(0, explength);
+      }
+
       $scope.getMonth = function () {
         var tanggalExpenses = $scope.input.tanggal;
         // split input
@@ -1325,7 +1344,7 @@ appControllers.controller('ExpensesReportsController',['$scope','$http',
             for (var i = 0; i < response.message.length; i++) {
               $scope.expensesReports.push(response.message[i]);
             }
-            $scope.expensesReports.splice(0, 1);
+            // $scope.expensesReports.splice(0, 1);
             idx = $scope.expensesReports.length-1;
             $scope.loading = true;
             // alert("bulan ="+mmExpenses +" tahun= "+yyExpenses);
