@@ -748,18 +748,18 @@ appControllers.controller('DailyReportsController',['$scope','$http',
         $scope.dailys.splice(0, length);
       }
 
-      $scope.total = function (idx) {
-        var price = $scope.dailys[idx].HargaAkhir;
-        var quantity = $scope.dailys[idx].Quantity;
-
-        $scope.dailys[idx].total = price*quantity;
-      }
+      // $scope.total = function (idx) {
+      //   var price = $scope.dailys[idx].HargaAkhir;
+      //   // var quantity = $scope.dailys[idx].Quantity;
+      //
+      //   $scope.dailys[idx].total = price;
+      // }
 
       $scope.SubTotal = function () {
         var resultHT =0;
 
          angular.forEach($scope.dailys, function (daily) {
-           resultHT += daily.total;
+           resultHT += daily.HargaAkhir;
          });
 
         return resultHT;
@@ -1790,18 +1790,18 @@ appControllers.controller('TodaysOrderController',['$scope','$http',
        }
      });
 
-     $scope.total = function (idx) {
-       var price = $scope.dailys[idx].HargaAkhir;
-       var quantity = $scope.dailys[idx].Quantity;
-      //  alert(price*quantity);
-       $scope.dailys[idx].total = Number(price)*Number(quantity);
-     }
+    //  $scope.total = function (idx) {
+    //    var price = $scope.dailys[idx].HargaAkhir;
+    //   //  var quantity = $scope.dailys[idx].Quantity;
+    //   //  alert(price*quantity);
+    //    $scope.dailys[idx].total = Number(price);
+    //  }
 
      $scope.SubTotal = function () {
        var resultHT =0;
 
         angular.forEach($scope.dailys, function (daily) {
-          resultHT += daily.total;
+          resultHT += daily.HargaAkhir;
         });
 
        return resultHT;
