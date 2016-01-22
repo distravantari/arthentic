@@ -214,6 +214,13 @@ appControllers.controller('MenuController',['$scope','$http',
          //  document.location.reload();
         }
       });
+      //setmenuready
+      var querry = "http://localhost:3000/api/setMenuReady?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+id;
+      $.get(querry).success(function(data){
+        if (data.message == "sukses") {
+          swal("Done!", "Order have been Saved.", "success");
+        }
+      });
 
       //insertHistory
       $.get('http://localhost:3000/api/user?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ&status=online').success(function(data){
