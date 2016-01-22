@@ -218,7 +218,7 @@ appControllers.controller('MenuController',['$scope','$http',
       var querry = "http://localhost:3000/api/setMenuReady?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+id;
       $.get(querry).success(function(data){
         if (data.message == "sukses") {
-          swal("Done!", "Order have been Saved.", "success");
+          swal("Done!", "Menu Updated.", "success");
         }
       });
 
