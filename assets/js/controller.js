@@ -573,6 +573,17 @@ appControllers.controller('InvoiceController',['$scope','$http','$window',
 
       $scope.invoice = [{}];
 
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      var hours = today.getHours();
+      var minutes = today.getMinutes();
+      var seconds = today.getSeconds();
+      today = months[mm-1]+' '+dd+', '+yyyy+'\n';
+      var times = hours+':'+minutes+':'+seconds;
+      $(".todaysdateinv").text(today+times);
+
       $http.get('http://localhost:3000/api/invoices?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ').success(function(data){
           $scope.invoice = data.message;
   				$scope.loading = false;
@@ -1509,18 +1520,51 @@ appControllers.controller('OrderController',['$scope','$http',
        return resultArticle;
      };
 
+     addRow = function () {
+       i++;
+       $scope.articles.push({
+         id: '',
+         reference: '',
+         titre: '',
+         price: 0,
+         quantity: 0,
+         discount: 0,
+         total:0
+       });
+       ord++;
+     }
+
     $scope.tambah = function() {
-      i++;
-      $scope.articles.push({
-        id: '',
-        reference: '',
-        titre: '',
-        price: 0,
-        quantity: 0,
-        discount: 0,
-        total:0
+      var idmenu = $scope.articles[i].reference;
+      var quantity = $scope.articles[i].quantity;
+
+      var querry = "http://localhost:3000/api/showMenuById?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+      $.get(querry).success(function(data){
+        var composition = data.message[0].komposisi;
+        // var hargaProduksi = data.message[0].hargaProduksi;
+        var res = composition.split(",");
+        var counter = 0;
+        for (var i = 0; i < res.length; i++) {
+          var stock = res[i].split(" ");
+          var namaStock = stock[0];
+          var jumlahStock = stock[1];
+          var value = jumlahStock*quantity;
+          //http://localhost:3000/api/cekStok?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&nama=diamond-milk&nilai=10000
+          var querry2 = "http://localhost:3000/api/cekStok?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&nama="+namaStock+"&nilai="+value;
+          $.get(querry2).success(function (data) {
+            // alert(data.message);
+            if (data.message == "stok di atas reorder stok") {
+              counter++;
+            }
+            else {
+              swal({   title: "Stok tidak cukup untuk menu ini",   text: data.message});
+            }
+            if (counter == res.length) {
+              addRow();
+            }
+          });
+        }
       });
-      ord++;
     };
 
      $scope.delete = function(index) {
@@ -1553,132 +1597,163 @@ appControllers.controller('OrderController',['$scope','$http',
               // var jumlahProduksi = Number(data.message[0].hargaProduksi)*quantity;
               // alert(data.message[0].hargaProduksi);
               var total = jumlahStock*quantity;
-               $.ajax({
-                 url: domain + ':3000/api/kurangStok',
-                 dataType: 'text',
-                 method: 'POST',
-                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                 data: {
-                   nama:namaStock,
-                   jumPengurangan:total,
-                   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-                 },
-                 success: function(response){
-                   obj = JSON.parse(response);
-                   // alert(obj.message);
-                   if (obj.message === "error") {
-                     swal({
-                          title: "Insufficient Stock!?",
-                          text: "Sisa stok tidak mencukupi",
-                          type: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#DD6B55",
-                          confirmButtonText: "Try Again!",
-                          closeOnConfirm: false
-                        },
-                          function(){
-                            swal("Okay!", "You got another chance.", "success");
-                      });
-                   }
-                   else {
-                     swal({   title: "Berhasil mengurangi stok",   text: obj.message});
-                   }
-                 },
-                 error: function(xhr, status, error){
-                   alert(error);
-                 },
-                 complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-                  //do smth if you need
-                 //  document.location.reload();
-                }
-              });
 
-              $.ajax({
-                url: domain + ':3000/api/reorderStok',
-                dataType: 'text',
-                method: 'POST',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: {
-                  nama:namaStock,
-                  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-                },
-                success: function(response){
-                  obj = JSON.parse(response);
-                  // alert(obj.message);
-                  // swal({   title: "Saatnya Order?",   text: obj.message});
-                  if (obj.message=="stock ini hampir habis") {
-                    var stockThat = "http://localhost:3000/api/getStockThatEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ";
-                     $.get(stockThat).success(function(data){
-                      //  alert(data.message.length);
-                      for (var j = 0; j < data.message.length; j++) {
-                          // alert(data.message[j].nama);
-                          $.ajax({
-                            url: domain + ':3000/api/showMenuFromKomposition',
-                            dataType: 'text',
-                            method: 'POST',
-                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                            data: {
-                              name:data.message[j].nama,
-                              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-                            },
-                            success: function(response){
-                              alert(response);
-                            },
-                            error: function(xhr, status, error){
-                              alert(error);
-                            },
-                            complete: function(){
-                           }
-                         });
-                      }
-                    });
-                  }
-                  //setmenuready
-                  var querry = "http://localhost:3000/api/setMenuReady?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
-                  $.get(querry).success(function(data){
-                    if (data.message == "sukses") {
-                      var nextQuerry = "http://localhost:3000/api/setMenuEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
-                      $.get(nextQuerry).success(function(data){
-                        if (data.message == "done") {
-                          swal("Done!", "Order have been Saved.", "success");
+              var querry2 = "http://localhost:3000/api/cekStok?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&nama="+namaStock+"&nilai="+total;
+              $.get(querry2).success(function (data) {
+                // alert(data.message);
+                if (data.message == "stok di atas reorder stok") {
+                    $.ajax({
+                      url: domain + ':3000/api/kurangStok',
+                      dataType: 'text',
+                      method: 'POST',
+                      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                      data: {
+                        nama:namaStock,
+                        jumPengurangan:total,
+                        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+                      },
+                      success: function(response){
+                        obj = JSON.parse(response);
+                        // alert(obj.message);
+                        if (obj.message === "error") {
+                          swal({
+                               title: "Insufficient Stock!?",
+                               text: "Sisa stok tidak mencukupi",
+                               type: "warning",
+                               showCancelButton: true,
+                               confirmButtonColor: "#DD6B55",
+                               confirmButtonText: "Try Again!",
+                               closeOnConfirm: false
+                             },
+                               function(){
+                                 swal("Okay!", "You got another chance.", "success");
+                           });
                         }
-                      });
+                        else {
+                          swal({   title: "Berhasil mengurangi stok",   text: obj.message});
+                        }
+                      },
+                      error: function(xhr, status, error){
+                        alert(error);
+                      },
+                      complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+                       //do smth if you need
+                      //  document.location.reload();
+                     }
+                   });
+
+                   $.ajax({
+                     url: domain + ':3000/api/insertOrder',
+                     dataType: 'text',
+                     method: 'POST',
+                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                     data: {
+                       nomerorder:idorder,
+                       id:idmenu,
+                       date:today,
+                       pesanan:menuname,
+                       quantity:quantity,
+                       diskon:discount,
+                       hargasatuan:price,
+                       hargaTotal:(price*quantity)-(price*quantity*(discount/100)),
+                       token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+                     },
+                     success: function(response){
+                       obj = JSON.parse(response);
+                      //  alert(obj.message);
+                       if (obj.message === "error") {
+                         swal({
+                              title: "Input Order gagal!",
+                              text: "Periksa input dengan Benar",
+                              type: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#DD6B55",
+                              confirmButtonText: "Try Again!",
+                              closeOnConfirm: false
+                            },
+                              function(){
+                                swal("Okay!", "You got another chance.", "success");
+                          });
+                       }
+                       else {
+                         swal("Good job!", "Berhasil Input Order", "success");
+                         $.ajax({
+                           url: domain + ':3000/api/reorderStok',
+                           dataType: 'text',
+                           method: 'POST',
+                           contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                           data: {
+                             nama:namaStock,
+                             token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+                           },
+                           success: function(response){
+                             obj = JSON.parse(response);
+                             // alert(obj.message);
+                             // swal({   title: "Saatnya Order?",   text: obj.message});
+                             if (obj.message=="stock ini hampir habis") {
+                               var stockThat = "http://localhost:3000/api/getStockThatEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ";
+                                $.get(stockThat).success(function(data){
+                                 //  alert(data.message.length);
+                                 for (var j = 0; j < data.message.length; j++) {
+                                     // alert(data.message[j].nama);
+                                     $.ajax({
+                                       url: domain + ':3000/api/showMenuFromKomposition',
+                                       dataType: 'text',
+                                       method: 'POST',
+                                       contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                                       data: {
+                                         name:data.message[j].nama,
+                                         token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
+                                       },
+                                       success: function(response){
+                                         alert(response);
+                                       },
+                                       error: function(xhr, status, error){
+                                         alert(error);
+                                       },
+                                       complete: function(){
+                                      }
+                                    });
+                                 }
+                               });
+                             }
+                             //setmenuready
+                             var querry = "http://localhost:3000/api/setMenuReady?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+                             $.get(querry).success(function(data){
+                               if (data.message == "sukses") {
+                                 var nextQuerry = "http://localhost:3000/api/setMenuEmpty?token=eyJhbGciOiJIUzI1NiJ9.dXNlcg.2Tbs8TkRGe7ZNu4CeiR5BXpK7-MMQZXc6ZTOLZiBoLQ&id="+idmenu;
+                                 $.get(nextQuerry).success(function(data){
+                                   // alert(data.message);
+                                   if (data.message == "done") {
+                                     swal("Done!", "Order have been Saved.", "success");
+                                   }
+                                 });
+                               }
+                             });
+
+                           },
+                           error: function(xhr, status, error){
+                             alert(error);
+                           },
+                           complete: function(){
+                          }
+                        });
+                       }
+                     },
+                     error: function(xhr, status, error){
+                       alert(error);
+                       // document.location.reload();
+                     },
+                     complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
+                      //do smth if you need
+                     //  document.location.reload();
                     }
                   });
-
-                },
-                error: function(xhr, status, error){
-                  alert(error);
-                },
-                complete: function(){
-               }
-             });
-           }
-     		});
-
-          $.ajax({
-            url: domain + ':3000/api/insertOrder',
-            dataType: 'text',
-            method: 'POST',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: {
-              nomerorder:idorder,
-              id:idmenu,
-              date:today,
-              pesanan:menuname,
-              quantity:quantity,
-              diskon:discount,
-              hargasatuan:price,
-              hargaTotal:(price*quantity)-(price*quantity*(discount/100)),
-              token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTA2NTYyNDh9.Ea_JD2LROIyqk14xO_eQw_JE2VnxgZOV5GoWF-E2OSQ'
-            },
-            success: function(response){
-              obj = JSON.parse(response);
-              // alert(obj.message);
-              if (obj.message === "error") {
-                swal({
-                     title: "Input Order gagal!",
-                     text: "Periksa input dengan Benar",
+                }
+                else {
+                  swal({
+                     title: "Insufficient Stock!?",
+                     text: "Sisa stok tidak mencukupi",
                      type: "warning",
                      showCancelButton: true,
                      confirmButtonColor: "#DD6B55",
@@ -1688,20 +1763,10 @@ appControllers.controller('OrderController',['$scope','$http',
                      function(){
                        swal("Okay!", "You got another chance.", "success");
                  });
-              }
-              else {
-                swal("Good job!", "Berhasil Input Order", "success");
-              }
-            },
-            error: function(xhr, status, error){
-              alert(error);
-              // document.location.reload();
-            },
-            complete: function(){ //A function to be called when the request finishes (after success and error callbacks are executed) - from jquery docs
-             //do smth if you need
-            //  document.location.reload();
+                }
+              });
            }
-         });
+     		});
        }
      }
 
