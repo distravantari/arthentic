@@ -1743,6 +1743,8 @@ appControllers.controller('OrderController',['$scope','$http',
      }
 
      $scope.save = function () {
+      $('#savebtn').addClass('hidden');
+
        for (var i = 0; i < $scope.articles.length; i++) {
           var idorder = $scope.articles[i].id;
           var idmenu = $scope.articles[i].reference;
