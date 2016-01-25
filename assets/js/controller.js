@@ -1743,7 +1743,6 @@ appControllers.controller('OrderController',['$scope','$http',
      }
 
      $scope.save = function () {
-      $('#savebtn').addClass('hidden');
 
        for (var i = 0; i < $scope.articles.length; i++) {
           var idorder = $scope.articles[i].id;
@@ -1775,6 +1774,7 @@ appControllers.controller('OrderController',['$scope','$http',
               $.get(querry2).success(function (data) {
                 if (data.message == "stok di atas reorder stok") {
                   counter++;
+                   $('#savebtn').addClass('hidden');
                 }
                 else {
                   swal({   title: "Stok tidak cukup untuk menu ini",   text: data.message});
