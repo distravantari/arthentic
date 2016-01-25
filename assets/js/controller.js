@@ -1639,7 +1639,11 @@ appControllers.controller('OrderController',['$scope','$http',
         }
      }
 
-     kurangStokfunction = function () {
+     kurangStokfunction = function ($idmn, $ns, $total) {
+       var namaStock = $ns;
+       var total = $total;
+       var idmenu = $idmn;
+
        $.ajax({
          url: domain + ':3000/api/kurangStok',
          dataType: 'text',
@@ -1781,9 +1785,9 @@ appControllers.controller('OrderController',['$scope','$http',
                 }
                 if (counter == res.length) {
                   insertOrderToDb();
-                  kurangStokfunction();
                 }
               });
+              kurangStokfunction(idmenu, namaStock, total);
            }
      		});
        }
